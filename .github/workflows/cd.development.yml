@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd manager.chainmart.site
+            cd dev-manager.chainmart.site
             docker-compose pull
             docker-compose up -d
 
@@ -55,4 +55,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            New version at: https://manager.chainmart.site
+            New version at: https://dev-manager.chainmart.site
