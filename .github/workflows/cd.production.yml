@@ -31,7 +31,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{secrets.DOCKER_CUSTOMER}}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{secrets.DOCKER_MANAGER}}
 
   ssh-to-server:
     name: SSH to Server
@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd dev-manager.chainmart.site
+            cd manager.chainmart.site
             docker-compose pull
             docker-compose up -d
 
@@ -55,4 +55,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            New version at: https://dev-manager.chainmart.site
+            New version at: https://manager.chainmart.site
