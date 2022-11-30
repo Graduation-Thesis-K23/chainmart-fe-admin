@@ -12,9 +12,6 @@ RUN \
 FROM node:16-alpine as build
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
-ENV NODE_ENV production
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -25,13 +22,5 @@ FROM nginx:1.13.12-alpine
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 reactjs
-
-USER reactjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
