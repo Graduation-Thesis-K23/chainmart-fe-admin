@@ -1,4 +1,4 @@
-name: Continuous Development DEV
+name: Continuous Deploy
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{secrets.DOCKER_DEV_MANAGER}}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{secrets.DOCKER_MANAGER}}
 
   ssh-to-server:
     name: SSH to Server
@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd dev-manager.chainmart.site
+            cd manager
             docker-compose stop
             docker-compose rm -f
             docker-compose pull
@@ -57,4 +57,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            New version at: https://dev-manager.chainmart.site
+            New version at: https://manager.chainmart.site
