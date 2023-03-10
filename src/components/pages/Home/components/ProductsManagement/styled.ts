@@ -1,0 +1,12 @@
+import styled from "styled-components";
+
+export const Products = styled.section`
+  padding: 24px;
+  height: 100%;
+`;
+
+export const Title = styled.p`
+  padding: 10px 0;
+  font-size: 32px;
+  font-weight: 700;
+`;
