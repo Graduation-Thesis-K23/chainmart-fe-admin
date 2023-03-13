@@ -1,19 +1,28 @@
-import React, { useRef, useState } from "react";
-import { Button, Input, InputRef, Space, Table } from "antd";
-import { ColumnsType, ColumnType } from "antd/es/table";
-import { SearchOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
+import React, { useEffect } from "react";
+import { Table } from "antd";
+import { AppstoreAddOutlined } from "@ant-design/icons";
+import { ColumnsType } from "antd/es/table";
 
-import { Products, Title } from "./styled";
-import productsList, { DataType } from "~/apis/ProductsManagement/get-products";
-import { FilterConfirmProps } from "antd/es/table/interface";
+import {
+  Products,
+  Title,
+  ProductsHeader,
+  MoreButton,
+  MoreButtonGroup,
+} from "./styled";
+import { ProductType } from "~/redux/mocks/get-products";
+import { fetchProducts } from "~/redux/product";
+import { useAppDispatch, useAppSelector } from "~/redux";
 
 const ProductsManagement = () => {
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-  const searchInput = useRef<InputRef>(null);
+  const productsState = useAppSelector((state) => state.products);
+  const dispatch = useAppDispatch();
 
-  const handleSearch = (
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
+  /*  const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: keyof DataType
@@ -67,11 +76,7 @@ const ProductsManagement = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes((value as string).toLowerCase()),
+
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
@@ -88,37 +93,51 @@ const ProductsManagement = () => {
       ) : (
         text
       ),
-  });
+  }); */
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<ProductType> = [
     {
       title: "Image",
-      dataIndex: "name",
+      dataIndex: "image",
       key: "image",
       width: "10%",
+      render: (_, record) => (
+        <div>
+          <img src={record.image} alt="product-image" />
+        </div>
+      ),
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       width: "30%",
-      ...getColumnSearchProps("name"),
+      sorter: (a, b) => a.price - b.price,
+      // ...getColumnSearchProps("name"),
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      ...getColumnSearchProps("address"),
+      sorter: (a, b) => a.price - b.price,
+      // ...getColumnSearchProps("image"),
     },
   ];
 
   return (
     <Products>
-      <Title>Products Management</Title>
+      <ProductsHeader>
+        <Title>Products Management</Title>
+        <MoreButtonGroup>
+          <AppstoreAddOutlined />
+          <MoreButton>More</MoreButton>
+        </MoreButtonGroup>
+      </ProductsHeader>
       <Table
         columns={columns}
-        dataSource={productsList}
+        dataSource={productsState.data}
         pagination={false}
+        size="small"
         scroll={{
           scrollToFirstRowOnChange: true,
           y: "calc(100vh - 220px)",

@@ -10,3 +10,23 @@ export const Title = styled.p`
   font-size: 32px;
   font-weight: 700;
 `;
+
+export const ProductsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const MoreButtonGroup = styled.div`
+  display: inline;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: green;
+  color: #fff;
+`;
+
+export const MoreButton = styled.button`
+  border: none;
+  background-color: transparent;
+  color: inherit;
+`;
