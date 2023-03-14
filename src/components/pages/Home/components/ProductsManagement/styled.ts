@@ -19,14 +19,19 @@ export const ProductsHeader = styled.div`
 
 export const MoreButtonGroup = styled.div`
   display: inline;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 4px;
   background-color: green;
   color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.6;
+  }
 `;
 
-export const MoreButton = styled.button`
-  border: none;
+export const MoreButton = styled.span`
+  margin-left: 4px;
   background-color: transparent;
   color: inherit;
 `;

@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
+
+import MoreModal from "./components/MoreModal";
 
 import {
   Products,
@@ -14,9 +16,60 @@ import { ProductType } from "~/redux/mocks/get-products";
 import { fetchProducts } from "~/redux/product";
 import { useAppDispatch, useAppSelector } from "~/redux";
 
+const columns: ColumnsType<ProductType> = [
+  {
+    title: "Image",
+    dataIndex: "image",
+    key: "image",
+    width: "10%",
+    render: (_, record) => (
+      <div>
+        <img src={record.image} alt="product-image" />
+      </div>
+    ),
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: "30%",
+    sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+  },
+];
+
 const ProductsManagement = () => {
+  const [moreModal, setMoreModal] = useState(false);
+
   const productsState = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
+
+  const handleMoreModal = (status: boolean) => {
+    setMoreModal(status);
+  };
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -95,40 +148,11 @@ const ProductsManagement = () => {
       ),
   }); */
 
-  const columns: ColumnsType<ProductType> = [
-    {
-      title: "Image",
-      dataIndex: "image",
-      key: "image",
-      width: "10%",
-      render: (_, record) => (
-        <div>
-          <img src={record.image} alt="product-image" />
-        </div>
-      ),
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      width: "30%",
-      sorter: (a, b) => a.price - b.price,
-      // ...getColumnSearchProps("name"),
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      sorter: (a, b) => a.price - b.price,
-      // ...getColumnSearchProps("image"),
-    },
-  ];
-
   return (
     <Products>
       <ProductsHeader>
         <Title>Products Management</Title>
-        <MoreButtonGroup>
+        <MoreButtonGroup onClick={() => handleMoreModal(true)}>
           <AppstoreAddOutlined />
           <MoreButton>More</MoreButton>
         </MoreButtonGroup>
@@ -148,6 +172,7 @@ const ProductsManagement = () => {
           },
         })}
       />
+      <MoreModal state={{ moreModal, setMoreModal }} />
     </Products>
   );
 };

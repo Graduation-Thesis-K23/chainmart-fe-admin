@@ -26,6 +26,9 @@ export const productsSlice = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data = action.payload;
     });
+    builder.addCase(addProduct.fulfilled, (state, action) => {
+      state.data.push(action.payload as unknown as ProductType);
+    });
   },
 });
 
@@ -35,6 +38,18 @@ export const fetchProducts = createAsyncThunk(
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return productList;
+  }
+);
+
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (data: object) => {
+    const newProduct = {
+      key: Date.now(),
+      ...data,
+    };
+
+    return newProduct;
   }
 );
 
