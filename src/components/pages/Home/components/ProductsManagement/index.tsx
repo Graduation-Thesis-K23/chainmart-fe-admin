@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { AppstoreAddOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 
 import MoreModal from "./components/MoreModal";
+import DetailModal from "./components/DetailModal";
+import CategoryDrawer from "./components/CategoryDrawer";
+
+import { ASYNC_STATUS } from "~/redux/constants";
 
 import {
   Products,
@@ -11,6 +15,7 @@ import {
   ProductsHeader,
   MoreButton,
   MoreButtonGroup,
+  CategoryButtonGroup,
 } from "./styled";
 import { ProductType } from "~/redux/mocks/get-products";
 import { fetchProducts } from "~/redux/product";
@@ -42,33 +47,51 @@ const columns: ColumnsType<ProductType> = [
     sorter: (a, b) => a.price - b.price,
   },
   {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
     sorter: (a, b) => a.price - b.price,
   },
   {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
+    title: "Sale",
+    dataIndex: "sale",
+    key: "sale",
     sorter: (a, b) => a.price - b.price,
   },
   {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
+    sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
     sorter: (a, b) => a.price - b.price,
   },
 ];
 
 const ProductsManagement = () => {
   const [moreModal, setMoreModal] = useState(false);
+  const [detailModal, setDetailModal] = useState(false);
+  const [viewProductId, setViewProductId] = useState("");
+  const [categoryDrawer, setCategoryDrawer] = useState(false);
 
   const productsState = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
 
   const handleMoreModal = (status: boolean) => {
     setMoreModal(status);
+  };
+
+  const handleClickProduct = (id: string) => {
+    setViewProductId(id);
+    setDetailModal(true);
+  };
+
+  const handleCategoryDrawer = (status: boolean) => {
+    setCategoryDrawer(status);
   };
 
   useEffect(() => {
@@ -152,27 +175,34 @@ const ProductsManagement = () => {
     <Products>
       <ProductsHeader>
         <Title>Products Management</Title>
-        <MoreButtonGroup onClick={() => handleMoreModal(true)}>
-          <AppstoreAddOutlined />
-          <MoreButton>More</MoreButton>
-        </MoreButtonGroup>
+        <div>
+          <CategoryButtonGroup onClick={() => handleCategoryDrawer(true)}>
+            <ContainerOutlined />
+            <MoreButton>Category</MoreButton>
+          </CategoryButtonGroup>
+          <MoreButtonGroup onClick={() => handleMoreModal(true)}>
+            <AppstoreAddOutlined />
+            <MoreButton>More</MoreButton>
+          </MoreButtonGroup>
+        </div>
       </ProductsHeader>
       <Table
         columns={columns}
         dataSource={productsState.data}
         pagination={false}
         size="small"
+        loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
           y: "calc(100vh - 220px)",
         }}
-        onRow={(record, rowIndex) => ({
-          onClick: () => {
-            console.log(record, rowIndex);
-          },
+        onRow={(record) => ({
+          onClick: () => handleClickProduct(record.key),
         })}
       />
       <MoreModal state={{ moreModal, setMoreModal }} />
+      <DetailModal state={{ detailModal, setDetailModal }} id={viewProductId} />
+      <CategoryDrawer state={{ categoryDrawer, setCategoryDrawer }} />
     </Products>
   );
 };

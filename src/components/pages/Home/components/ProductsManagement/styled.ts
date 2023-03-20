@@ -30,6 +30,10 @@ export const MoreButtonGroup = styled.div`
   }
 `;
 
+export const CategoryButtonGroup = styled(MoreButtonGroup)`
+  margin-right: 10px;
+`;
+
 export const MoreButton = styled.span`
   margin-left: 4px;
   background-color: transparent;

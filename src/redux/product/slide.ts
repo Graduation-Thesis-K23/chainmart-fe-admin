@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
-import productList from "../mocks/get-products";
-import { ProductType } from "../mocks/get-products";
+import productList, { ProductType } from "../mocks/get-products";
 
 export interface ProductsState {
   data: ProductType[];
