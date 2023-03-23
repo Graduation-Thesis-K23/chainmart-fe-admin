@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
-export const InputGroup = styled.div`
-  margin-bottom: 10px;
+export const TextareaGroup = styled.div`
+  width: 100%;
+  margin-bottom: 16px;
 `;
 
-export const InputLabel = styled.label`
-  display: inline-block;
-  margin-bottom: 12px;
+export const TextareaLabel = styled.label`
+  display: block;
+  padding-bottom: 10px;
   font-size: 16px;
-  font-weight: 600;
 `;
 
 export const SpanLabel = styled.span`
@@ -57,11 +57,10 @@ export const InputG = styled.div<{ active: boolean }>`
       : ""}
 `;
 
-export const InputElement = styled.input`
-  flex: 1;
-  display: inline-block;
-  background-color: transparent;
-  margin-left: 6px;
+export const TextareaElement = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  background-color: #eee;
   border: none;
   outline: none;
 `;

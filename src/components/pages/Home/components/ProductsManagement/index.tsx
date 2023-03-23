@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
+import {
+  AppstoreAddOutlined,
+  ContainerOutlined,
+  DeliveredProcedureOutlined,
+} from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 
 import MoreModal from "./components/MoreModal";
@@ -20,6 +24,7 @@ import {
 import { ProductType } from "~/redux/mocks/get-products";
 import { fetchProducts } from "~/redux/product";
 import { useAppDispatch, useAppSelector } from "~/redux";
+import SupplierDrawer from "./components/SupplierDrawer";
 
 const columns: ColumnsType<ProductType> = [
   {
@@ -77,6 +82,7 @@ const ProductsManagement = () => {
   const [detailModal, setDetailModal] = useState(false);
   const [viewProductId, setViewProductId] = useState("");
   const [categoryDrawer, setCategoryDrawer] = useState(false);
+  const [supplierDrawer, setSupplierDrawer] = useState(false);
 
   const productsState = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
@@ -92,6 +98,10 @@ const ProductsManagement = () => {
 
   const handleCategoryDrawer = (status: boolean) => {
     setCategoryDrawer(status);
+  };
+
+  const handleSupplierDrawer = (status: boolean) => {
+    setSupplierDrawer(status);
   };
 
   useEffect(() => {
@@ -176,6 +186,10 @@ const ProductsManagement = () => {
       <ProductsHeader>
         <Title>Products Management</Title>
         <div>
+          <CategoryButtonGroup onClick={() => handleSupplierDrawer(true)}>
+            <DeliveredProcedureOutlined />
+            <MoreButton>Supplier</MoreButton>
+          </CategoryButtonGroup>
           <CategoryButtonGroup onClick={() => handleCategoryDrawer(true)}>
             <ContainerOutlined />
             <MoreButton>Category</MoreButton>
@@ -202,7 +216,8 @@ const ProductsManagement = () => {
       />
       <MoreModal state={{ moreModal, setMoreModal }} />
       <DetailModal state={{ detailModal, setDetailModal }} id={viewProductId} />
-      <CategoryDrawer state={{ categoryDrawer, setCategoryDrawer }} />
+      <CategoryDrawer state={{ categoryDrawer, handleCategoryDrawer }} />
+      <SupplierDrawer state={{ supplierDrawer, handleSupplierDrawer }} />
     </Products>
   );
 };

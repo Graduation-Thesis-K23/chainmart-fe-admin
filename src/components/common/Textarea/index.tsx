@@ -1,25 +1,19 @@
-import React, {
-  FC,
-  useId,
-  memo,
-  HTMLInputTypeAttribute,
-  useState,
-} from "react";
+import React, { FC, useId, useState } from "react";
 
 import {
-  InputGroup,
-  InputLabel,
-  InputElement,
-  SpanLabel,
+  TextareaGroup,
+  TextareaLabel,
+  TextareaElement,
   InputG,
+  SpanLabel,
 } from "./styled";
 
-const Input: FC<{
+const Textarea: FC<{
   label?: string;
-  type?: HTMLInputTypeAttribute;
   onChange: (...event: unknown[]) => void;
   name: string;
-}> = ({ label, type = "text", onChange, name }) => {
+  rows?: number;
+}> = ({ name, label, onChange, rows = 2 }) => {
   const [active, setActive] = useState(false);
   const id = useId();
 
@@ -32,22 +26,21 @@ const Input: FC<{
   };
 
   return (
-    <InputGroup>
-      {label && <InputLabel htmlFor={id}>{label}</InputLabel>}
+    <TextareaGroup>
+      {label && <TextareaLabel htmlFor={id}>{label}</TextareaLabel>}
       <InputG active={active}>
-        <InputElement
-          type={type}
+        <TextareaElement
           id={id}
+          rows={rows}
           onChange={onChange}
-          onFocus={onFocus}
           onBlur={onBlur}
+          onFocus={onFocus}
           name={name}
-          required
         />
         <SpanLabel></SpanLabel>
       </InputG>
-    </InputGroup>
+    </TextareaGroup>
   );
 };
 
-export default memo(Input);
+export default Textarea;

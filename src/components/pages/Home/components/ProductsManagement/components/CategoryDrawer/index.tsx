@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import { Drawer, Divider } from "antd";
 
 import CategoryDrawerTable from "../CategoryDrawerTable";
@@ -7,11 +7,11 @@ import CategoryDrawerForm from "../CategoryDrawerForm";
 const CategoryDrawer: FC<{
   state: {
     categoryDrawer: boolean;
-    setCategoryDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+    handleCategoryDrawer: (status: boolean) => void;
   };
 }> = ({ state }) => {
   const onClose = () => {
-    state.setCategoryDrawer(false);
+    state.handleCategoryDrawer(false);
   };
 
   return (
@@ -29,4 +29,4 @@ const CategoryDrawer: FC<{
   );
 };
 
-export default CategoryDrawer;
+export default memo(CategoryDrawer);

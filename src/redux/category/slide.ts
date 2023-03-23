@@ -13,6 +13,8 @@ const initialState: CategoryState = {
   status: ASYNC_STATUS.IDLE,
 };
 
+type AddCategory = Omit<CategoryType, "id">;
+
 export const categorySlide = createSlice({
   name: "categories",
   initialState,
@@ -25,6 +27,13 @@ export const categorySlide = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data = action.payload;
     });
+    builder.addCase(addCategories.pending, (state) => {
+      state.status = ASYNC_STATUS.LOADING;
+    });
+    builder.addCase(addCategories.fulfilled, (state, action) => {
+      state.status = ASYNC_STATUS.SUCCEED;
+      state.data.push(action.payload);
+    });
   },
 });
 
@@ -34,6 +43,18 @@ export const fetchCategories = createAsyncThunk(
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return categoryList;
+  }
+);
+
+export const addCategories = createAsyncThunk(
+  "categories/addCategories",
+  async (data: AddCategory): Promise<CategoryType> => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return {
+      id: "" + Date.now(),
+      ...data,
+    };
   }
 );
 

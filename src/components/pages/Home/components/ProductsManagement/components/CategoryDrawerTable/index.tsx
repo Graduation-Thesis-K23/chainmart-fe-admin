@@ -9,10 +9,10 @@ import { ASYNC_STATUS } from "~/redux/constants";
 
 const columns: ColumnsType<CategoryType> = [
   {
-    title: "Index",
+    title: "No",
     dataIndex: "id",
     align: "center",
-    width: "3%",
+    width: "15%",
     render: (_, __, index) => <span>{index + 1}</span>,
   },
   {
@@ -39,6 +39,7 @@ const CategoryDrawerTable = () => {
       columns={columns}
       dataSource={categoriesState.data}
       loading={!(categoriesState.status === ASYNC_STATUS.SUCCEED)}
+      scroll={{ y: 580 }}
       pagination={false}
     />
   );
