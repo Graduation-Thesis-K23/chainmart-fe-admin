@@ -39,6 +39,11 @@ const items: MenuProps["items"] = [
     icon: <UsergroupAddOutlined />,
     label: "Orders Management",
   },
+  {
+    key: "SUPPLIER",
+    icon: <UsergroupAddOutlined />,
+    label: "Supplier Management",
+  },
 ];
 
 const getPage = (page: string) => {

@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
-import categoryList, { CategoryType } from "../mocks/get-categories";
+import instance from "~/services/axios-instance";
+
+export interface CategoryType {
+  id: string;
+  name: string;
+  description: string;
+}
 
 interface CategoryState {
   data: CategoryType[];
@@ -27,34 +33,42 @@ export const categorySlide = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data = action.payload;
     });
-    builder.addCase(addCategories.pending, (state) => {
+    builder.addCase(addCategory.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
     });
-    builder.addCase(addCategories.fulfilled, (state, action) => {
+    builder.addCase(addCategory.fulfilled, (state, action) => {
       state.status = ASYNC_STATUS.SUCCEED;
       state.data.push(action.payload);
+    });
+    builder.addCase(deleteCategory.pending, (state) => {
+      state.status = ASYNC_STATUS.LOADING;
+    });
+    builder.addCase(deleteCategory.fulfilled, (state, action) => {
+      state.status = ASYNC_STATUS.SUCCEED;
+      state.data = state.data.filter(
+        (category) => category.id !== action.payload
+      );
     });
   },
 });
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
-  async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    return categoryList;
-  }
+  async (): Promise<CategoryType[]> => await instance.get("/api/categories")
 );
 
-export const addCategories = createAsyncThunk(
+export const addCategory = createAsyncThunk(
   "categories/addCategories",
-  async (data: AddCategory): Promise<CategoryType> => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  async (data: AddCategory): Promise<CategoryType> =>
+    await instance.post("/api/categories", data)
+);
 
-    return {
-      id: "" + Date.now(),
-      ...data,
-    };
+export const deleteCategory = createAsyncThunk(
+  "categories/deleteCategory",
+  async (id: string): Promise<string> => {
+    await instance.delete(`/api/categories/${id}`);
+
+    return id;
   }
 );
 
