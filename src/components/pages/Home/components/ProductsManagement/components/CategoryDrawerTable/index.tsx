@@ -82,6 +82,7 @@ const CategoryDrawerTable = () => {
         loading={!(categoriesState.status === ASYNC_STATUS.SUCCEED)}
         scroll={{ y: 580 }}
         pagination={false}
+        rowKey="id"
       />
     </>
   );

@@ -20,7 +20,7 @@ const CategoryDrawer: FC<{
       placement="right"
       onClose={onClose}
       open={state.categoryDrawer}
-      width="500"
+      width="600px"
     >
       <CategoryDrawerForm />
       <Divider />
