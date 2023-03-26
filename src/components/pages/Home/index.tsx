@@ -10,12 +10,14 @@ import Dashboard from "./components/Dashboard";
 import ProductsManagement from "./components/ProductsManagement";
 import EmployeesManagement from "./components/EmployeesManagement";
 import OrdersManagement from "./components/OrdersManagement";
+import SuppliersManagement from "./components/SuppliersManagement";
 
 const PAGES = {
   DASHBOARD: "DASHBOARD",
   PRODUCTS: "PRODUCTS",
   EMPLOYEES: "EMPLOYEES",
   ORDERS: "ORDERS",
+  SUPPLIERS: "SUPPLIERS",
 };
 
 const items: MenuProps["items"] = [
@@ -40,7 +42,7 @@ const items: MenuProps["items"] = [
     label: "Orders Management",
   },
   {
-    key: "SUPPLIER",
+    key: "SUPPLIERS",
     icon: <UsergroupAddOutlined />,
     label: "Supplier Management",
   },
@@ -57,6 +59,9 @@ const getPage = (page: string) => {
       break;
     case PAGES.ORDERS:
       Content = OrdersManagement;
+      break;
+    case PAGES.SUPPLIERS:
+      Content = SuppliersManagement;
       break;
   }
   return Content;

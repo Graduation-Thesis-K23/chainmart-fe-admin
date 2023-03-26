@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Table, Popconfirm, notification } from "antd";
 import { ColumnsType } from "antd/es/table";
 import styled from "styled-components";
@@ -36,38 +36,41 @@ const CategoryDrawerTable = () => {
     });
   };
 
-  const columns: ColumnsType<CategoryType> = [
-    {
-      title: "No",
-      dataIndex: "id",
-      align: "center",
-      width: "15%",
-      render: (_, __, index) => <span>{index + 1}</span>,
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      width: "25%",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-    },
-    {
-      title: "Action",
-      render: (_, category) => (
-        <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this category?"
-          onConfirm={() => confirm(category.id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <DeleteButton>Delete</DeleteButton>
-        </Popconfirm>
-      ),
-    },
-  ];
+  const columns: ColumnsType<CategoryType> = useMemo(
+    () => [
+      {
+        title: "No",
+        dataIndex: "id",
+        align: "center",
+        width: "15%",
+        render: (_, __, index) => <span>{index + 1}</span>,
+      },
+      {
+        title: "Name",
+        dataIndex: "name",
+        width: "25%",
+      },
+      {
+        title: "Description",
+        dataIndex: "description",
+      },
+      {
+        title: "Action",
+        render: (_, { id }) => (
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this category?"
+            onConfirm={() => confirm(id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <DeleteButton>Delete</DeleteButton>
+          </Popconfirm>
+        ),
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());

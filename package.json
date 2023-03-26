@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start": "serve -s build -p 8080",
-    "start:prod": "serve -s build -p 80",
     "dev": "craco start",
     "build": "craco build",
     "test": "craco test",
