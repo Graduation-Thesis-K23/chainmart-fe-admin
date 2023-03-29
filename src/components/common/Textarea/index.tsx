@@ -13,7 +13,8 @@ const Textarea: FC<{
   onChange: (...event: unknown[]) => void;
   name: string;
   rows?: number;
-}> = ({ name, label, onChange, rows = 2 }) => {
+  inputRef?: React.RefObject<HTMLTextAreaElement>;
+}> = ({ name, label, onChange, rows = 2, inputRef }) => {
   const [active, setActive] = useState(false);
   const id = useId();
 
@@ -36,6 +37,7 @@ const Textarea: FC<{
           onBlur={onBlur}
           onFocus={onFocus}
           name={name}
+          ref={inputRef}
         />
         <SpanLabel></SpanLabel>
       </InputG>

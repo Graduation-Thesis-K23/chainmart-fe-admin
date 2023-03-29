@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -8,7 +8,6 @@ import DetailModal from "./components/DetailModal";
 import CategoryDrawer from "./components/CategoryDrawer";
 
 import { ASYNC_STATUS } from "~/redux/constants";
-
 import {
   Products,
   Title,
@@ -194,7 +193,7 @@ const ProductsManagement = () => {
         loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
-          y: "calc(100vh - 220px)",
+          y: "calc(100vh - 241px)",
         }}
         onRow={(record) => ({
           onClick: () => handleClickProduct(record.key),
@@ -207,4 +206,4 @@ const ProductsManagement = () => {
   );
 };
 
-export default ProductsManagement;
+export default memo(ProductsManagement);

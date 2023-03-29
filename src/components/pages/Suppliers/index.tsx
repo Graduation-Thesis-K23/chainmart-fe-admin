@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -13,6 +13,8 @@ import {
 import { fetchSuppliers, SupplierType } from "~/redux/supplier";
 import { useAppDispatch, useAppSelector } from "~/redux";
 import { ASYNC_STATUS } from "~/redux/constants";
+import MoreSupplierModal from "./components/MoreSupplierModal";
+import DetailSupplierModal from "./components/DetailSupplierModal";
 
 const columns: ColumnsType<SupplierType> = [
   {
@@ -54,17 +56,35 @@ const columns: ColumnsType<SupplierType> = [
 const SuppliersManagement = () => {
   const dispatch = useAppDispatch();
   const suppliers = useAppSelector((state) => state.suppliers);
+  const [moreSupplierModal, setMoreSupplierModal] = useState(false);
+  const [detailSupplierModal, setDetailSupplierModal] = useState(false);
+  const [supplier, setSupplier] = useState({} as SupplierType);
 
   useEffect(() => {
     dispatch(fetchSuppliers());
   }, []);
 
+  const handleMoreSupplier = useCallback(
+    (status: boolean) => setMoreSupplierModal(status),
+    []
+  );
+
+  const handleDetailSupplier = useCallback(
+    (status: boolean) => setDetailSupplierModal(status),
+    []
+  );
+
+  const onRowClick = useCallback((supplier: SupplierType) => {
+    setSupplier(supplier);
+    handleDetailSupplier(true);
+  }, []);
+
   return (
     <Suppliers>
       <SuppliersHeader>
-        <Title>Products Management</Title>
+        <Title>Suppliers Management</Title>
         <div>
-          <MoreButtonGroup>
+          <MoreButtonGroup onClick={() => handleMoreSupplier(true)}>
             <AppstoreAddOutlined />
             <MoreButton>More</MoreButton>
           </MoreButtonGroup>
@@ -76,13 +96,30 @@ const SuppliersManagement = () => {
         loading={!(suppliers.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
-          y: "calc(100vh - 220px)",
+          y: "calc(100vh - 241px)",
         }}
         pagination={false}
         rowKey="id"
+        onRow={(supplier) => ({
+          onClick: () => onRowClick(supplier),
+        })}
       />
+      {moreSupplierModal && (
+        <MoreSupplierModal
+          moreSupplierModal={moreSupplierModal}
+          handleMoreSupplier={handleMoreSupplier}
+        />
+      )}
+
+      {detailSupplierModal && (
+        <DetailSupplierModal
+          detailSupplierModal={detailSupplierModal}
+          handleDetailSupplier={handleDetailSupplier}
+          supplier={supplier}
+        />
+      )}
     </Suppliers>
   );
 };
 
-export default SuppliersManagement;
+export default memo(SuppliersManagement);

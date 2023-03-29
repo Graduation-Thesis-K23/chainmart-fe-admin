@@ -5,8 +5,7 @@ import { notification } from "antd";
 
 import { Input, Textarea } from "~/components/common";
 import { useAppDispatch } from "~/redux";
-import { addCategory } from "~/redux/category";
-import { CategoryType } from "~/redux/mocks/get-categories";
+import { addCategory, CategoryType } from "~/redux/category";
 
 type AddCategory = Omit<CategoryType, "id">;
 

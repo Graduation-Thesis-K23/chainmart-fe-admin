@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC, memo } from "react";
 import { LineChart, Line } from "recharts";
 
 const data = [
@@ -7,7 +7,7 @@ const data = [
   { name: "Page B", uv: 500, pv: 2500, amt: 2500 },
 ];
 
-const Dashboard = () => {
+const Dashboard: FC = () => {
   return (
     <section>
       <LineChart width={400} height={400} data={data}>
@@ -17,4 +17,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default memo(Dashboard);

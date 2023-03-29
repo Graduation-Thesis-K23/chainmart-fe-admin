@@ -5,6 +5,7 @@ import React, {
   HTMLInputTypeAttribute,
   useState,
 } from "react";
+import { RefCallBack } from "react-hook-form";
 
 import {
   InputGroup,
@@ -18,8 +19,10 @@ const Input: FC<{
   label?: string;
   type?: HTMLInputTypeAttribute;
   onChange: (...event: unknown[]) => void;
-  name: string;
-}> = ({ label, type = "text", onChange, name }) => {
+  name?: string;
+  value?: string;
+  inputRef?: RefCallBack;
+}> = ({ label, type = "text", onChange, name, inputRef, value }) => {
   const [active, setActive] = useState(false);
   const id = useId();
 
@@ -41,8 +44,9 @@ const Input: FC<{
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          value={value}
           name={name}
-          required
+          ref={inputRef}
         />
         <SpanLabel></SpanLabel>
       </InputG>

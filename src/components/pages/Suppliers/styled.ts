@@ -35,3 +35,25 @@ export const MoreButton = styled.span`
   background-color: transparent;
   color: inherit;
 `;
+
+export const FooterForm = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const SubmitButton = styled.input`
+  padding: 8px 14px;
+  background-color: green;
+  color: white;
+  border: 0;
+  cursor: pointer;
+`;
+
+export const CancelButton = styled.input`
+  margin-right: 8px;
+  padding: 8px 14px;
+  background-color: rgb(238, 238, 238);
+  color: #000000c8;
+  border: 0;
+  cursor: pointer;
+`;

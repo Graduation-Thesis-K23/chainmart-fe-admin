@@ -1,14 +1,57 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import Home from "../pages";
-import Login from "../pages/login";
-import Settings from "../pages/settings";
+import {
+  Dashboard,
+  Products,
+  Settings,
+  Login,
+  Employees,
+  Orders,
+  Suppliers,
+} from "~/components/pages";
+import MainLayout from "~/components/layouts/MainLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <MainLayout>
+        <Dashboard />
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/products",
+    element: (
+      <MainLayout>
+        <Products />
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/employees",
+    element: (
+      <MainLayout>
+        <Employees />
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/orders",
+    element: (
+      <MainLayout>
+        <Orders />
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/suppliers",
+    element: (
+      <MainLayout>
+        <Suppliers />
+      </MainLayout>
+    ),
   },
   {
     path: "/settings",
@@ -16,6 +59,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "*",
     element: <Login />,
   },
 ]);

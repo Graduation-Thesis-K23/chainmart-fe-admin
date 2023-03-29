@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 
 import { LoginContainer } from "./LoginStyled";
+import Log from "~/utils/Log";
 
 interface SignInPayload {
   username: string;
@@ -10,7 +11,7 @@ interface SignInPayload {
 }
 
 const onFinish = (values: SignInPayload) => {
-  console.log("Success:", values);
+  Log("Success:", values);
 };
 
 const Login = () => {
