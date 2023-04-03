@@ -72,6 +72,8 @@ export const fetchSuppliers = createAsyncThunk(
         supplierStateStatus === ASYNC_STATUS.SUCCEED
       ) {
         return false;
+      } else {
+        return true;
       }
     },
   }

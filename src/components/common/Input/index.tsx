@@ -20,7 +20,7 @@ const Input: FC<{
   type?: HTMLInputTypeAttribute;
   onChange: (...event: unknown[]) => void;
   name?: string;
-  value?: string;
+  value?: string | number;
   inputRef?: RefCallBack;
 }> = ({ label, type = "text", onChange, name, inputRef, value }) => {
   const [active, setActive] = useState(false);

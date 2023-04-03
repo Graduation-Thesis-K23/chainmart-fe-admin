@@ -14,7 +14,8 @@ const Select: FC<{
   options: SelectData[];
   value?: string | string[] | number | number[] | LabeledValue | LabeledValue[];
   defaultValue?: string;
-}> = ({ label, onChange, options, defaultValue }) => {
+  loading?: boolean;
+}> = ({ label, onChange, options, defaultValue, loading = false }) => {
   const id = useId();
 
   return (
@@ -26,6 +27,7 @@ const Select: FC<{
           onChange={onChange}
           options={options}
           showSearch
+          loading={loading}
           bordered={false}
           style={{
             width: "100%",
