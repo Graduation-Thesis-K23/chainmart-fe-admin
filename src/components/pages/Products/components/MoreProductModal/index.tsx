@@ -1,25 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, FC } from "react";
 import { Modal, Row, Col } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types";
 import dayjs from "dayjs";
 
-import { useAppDispatch, useAppSelector } from "~/redux";
-
-import { SubmitGroup, SubmitButton } from "./styled";
 import { Input, Select, DatePicker } from "~/components/common";
+import Options from "./components/Options";
+import Specifications from "./components/Specifications";
+import Images from "./components/Images";
+import Description from "./components/Description";
+
+import { useAppDispatch, useAppSelector } from "~/redux";
+import { SubmitGroup, SubmitButton } from "./styled";
 import { ASYNC_STATUS, fetchSuppliers, fetchCategories } from "~/redux";
 import Log from "~/utils/Log";
-import Options from "./components/Options";
 
-const MoreProductModal: React.FC<{
-  state: {
-    moreModal: boolean;
-    setMoreModal: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}> = ({ state }) => {
+const MoreProductModal: FC<{
+  moreModal: boolean;
+  setMoreModal: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ moreModal, setMoreModal }) => {
+  Log("MoreProductModal");
+
   const handleModal = (status: boolean) => {
-    state.setMoreModal(status);
+    setMoreModal(status);
   };
 
   const { suppliers, categories } = useAppSelector((state) => state);
@@ -30,22 +33,22 @@ const MoreProductModal: React.FC<{
     defaultValues: {
       name: "",
       price: 0,
-      discount: 0,
+      sale: 0,
       quantity: 0,
-      image: "",
+      images: [],
       category: "",
       supplier: "",
       expiry_date: dayjs(),
-      sale: 0,
       options: "",
       specifications: "",
+      description: "",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     Log(data);
     Log(dayjs(data.expiry_date, "YYYY-MM-DD").toDate());
-    state.setMoreModal(true);
+    setMoreModal(true);
   };
 
   useEffect(() => {
@@ -56,13 +59,13 @@ const MoreProductModal: React.FC<{
   return (
     <Modal
       centered
-      open={state.moreModal}
+      open={moreModal}
       title={null}
       onCancel={() => handleModal(false)}
       footer={null}
       width={1400}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <Row gutter={[24, 24]}>
           <Col span={24}>
             <Controller
@@ -77,6 +80,7 @@ const MoreProductModal: React.FC<{
                   name={name}
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
         </Row>
@@ -95,6 +99,7 @@ const MoreProductModal: React.FC<{
                   type="number"
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
           <Col span={6}>
@@ -111,6 +116,7 @@ const MoreProductModal: React.FC<{
                   type="number"
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
           <Col span={6}>
@@ -127,6 +133,7 @@ const MoreProductModal: React.FC<{
                   type="number"
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
           <Col span={6}>
@@ -140,6 +147,7 @@ const MoreProductModal: React.FC<{
                   name={name}
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
         </Row>
@@ -161,6 +169,7 @@ const MoreProductModal: React.FC<{
                   ]}
                 />
               )}
+              rules={{ required: true }}
             />
           </Col>
           <Col span={18}>
@@ -180,6 +189,19 @@ const MoreProductModal: React.FC<{
                   ]}
                 />
               )}
+              rules={{ required: true }}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[24, 24]}>
+          <Col>
+            <Controller
+              name="images"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Images onChange={onChange} />
+              )}
+              rules={{ required: true }}
             />
           </Col>
         </Row>
@@ -189,41 +211,31 @@ const MoreProductModal: React.FC<{
               name="options"
               control={control}
               render={({ field: { onChange } }) => (
-                <Options label="Options" onChange={onChange} />
+                <Options onChange={onChange} />
               )}
+              rules={{ required: true }}
             />
           </Col>
           <Col span={12}>
-            {/* <Controller
-              name="image"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <div>
-                  <label htmlFor="s">Image</label>
-                  <ImgCrop>
-                    <Upload
-                      onChange={onChange}
-                      showUploadList={false}
-                      onPreview={onPreview}
-                    >
-                      <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                  </ImgCrop>
-                </div>
-              )}
-            /> */}
             <Controller
               name="specifications"
               control={control}
-              render={({ field: { ref, onChange, value, name } }) => (
-                <Input
-                  label="Specifications"
-                  inputRef={ref}
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                />
+              render={({ field: { onChange } }) => (
+                <Specifications onChange={onChange} />
               )}
+              rules={{ required: true }}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[24, 24]}>
+          <Col span={24}>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Description onChange={onChange} />
+              )}
+              rules={{ required: true }}
             />
           </Col>
         </Row>

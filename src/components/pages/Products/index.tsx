@@ -3,8 +3,8 @@ import { Table } from "antd";
 import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 
-import MoreModal from "./components/MoreProductModal";
-import DetailModal from "./components/DetailProductModal";
+import MoreProductModal from "./components/MoreProductModal";
+import DetailProductModal from "./components/DetailProductModal";
 import CategoryDrawer from "./components/CategoryDrawer";
 
 import { ASYNC_STATUS } from "~/redux/constants";
@@ -199,15 +199,21 @@ const ProductsManagement = () => {
           onClick: () => handleClickProduct(record.key),
         })}
       />
-      {moreModal && <MoreModal state={{ moreModal, setMoreModal }} />}
+      {moreModal && (
+        <MoreProductModal moreModal={moreModal} setMoreModal={setMoreModal} />
+      )}
       {detailModal && (
-        <DetailModal
-          state={{ detailModal, setDetailModal }}
+        <DetailProductModal
+          detailModal={detailModal}
+          setDetailModal={setDetailModal}
           id={viewProductId}
         />
       )}
       {categoryDrawer && (
-        <CategoryDrawer state={{ categoryDrawer, handleCategoryDrawer }} />
+        <CategoryDrawer
+          categoryDrawer={categoryDrawer}
+          handleCategoryDrawer={handleCategoryDrawer}
+        />
       )}
     </Products>
   );

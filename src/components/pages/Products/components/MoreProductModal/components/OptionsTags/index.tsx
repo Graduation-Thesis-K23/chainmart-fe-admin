@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import type { InputRef } from "antd";
-import { Input, Tag } from "antd";
+import { Input, Tag, InputRef } from "antd";
 
 import Log from "~/utils/Log";
 import { OptionType } from "../Options";
+import { AddBtn, BtnGroup, CancelBtn } from "./styled";
 
 const OptionsTags: FC<{
   options: OptionType[];
@@ -109,20 +109,20 @@ const OptionsTags: FC<{
           <PlusOutlined /> More Option
         </Tag>
       )}
-      <div>
-        <div
+      <BtnGroup>
+        <AddBtn
           style={{ display: "inline-block" }}
           onClick={() => handleSubmitNewOption()}
         >
-          OK
-        </div>
-        <div
+          Add
+        </AddBtn>
+        <CancelBtn
           style={{ display: "inline-block" }}
           onClick={() => handleMoreOptions(false)}
         >
           Cancel
-        </div>
-      </div>
+        </CancelBtn>
+      </BtnGroup>
     </div>
   );
 };

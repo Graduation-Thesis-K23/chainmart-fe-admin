@@ -16,9 +16,8 @@ export interface OptionType {
 }
 
 const Options: FC<{
-  label?: string;
   onChange: (...event: unknown[]) => void;
-}> = ({ label, onChange }) => {
+}> = ({ onChange }) => {
   const [moreOption, setMoreOption] = useState(false);
   const [options, setOptions] = useState<OptionType[]>([
     { id: Date.now(), label: "Color", values: ["s", "b"] },
@@ -35,7 +34,7 @@ const Options: FC<{
   return (
     <OptionsContainer>
       <OptionsHeader>
-        <OptionsLabel>{label}</OptionsLabel>
+        <OptionsLabel>Options</OptionsLabel>
 
         <PlusCircleTwoTone
           style={{
@@ -48,7 +47,7 @@ const Options: FC<{
         <div>
           {options.map((option) => (
             <div key={option.id}>
-              + {option.label}: {option.values.map((i) => i + " | ")}
+              + {option.label}: {option.values.join(", ")}
             </div>
           ))}
         </div>

@@ -5,13 +5,11 @@ import CategoryDrawerTable from "../CategoryDrawerTable";
 import CategoryDrawerForm from "../CategoryDrawerForm";
 
 const CategoryDrawer: FC<{
-  state: {
-    categoryDrawer: boolean;
-    handleCategoryDrawer: (status: boolean) => void;
-  };
-}> = ({ state }) => {
+  categoryDrawer: boolean;
+  handleCategoryDrawer: (status: boolean) => void;
+}> = ({ categoryDrawer, handleCategoryDrawer }) => {
   const onClose = () => {
-    state.handleCategoryDrawer(false);
+    handleCategoryDrawer(false);
   };
 
   return (
@@ -19,7 +17,7 @@ const CategoryDrawer: FC<{
       title="Categories Management"
       placement="right"
       onClose={onClose}
-      open={state.categoryDrawer}
+      open={categoryDrawer}
       width="600px"
     >
       <CategoryDrawerForm />
