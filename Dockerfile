@@ -1,4 +1,4 @@
-FROM node:18-alpine as deps
+FROM node:16-alpine as deps
 WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -9,7 +9,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM node:18-alpine as build
+FROM node:16-alpine as build
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -18,10 +18,9 @@ COPY . .
 RUN yarn build
 
 
-FROM node:18-alpine AS runner
-WORKDIR /app
+FROM nginx:1.13.12-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=build /app/build ./
-RUN npm i -g serve
-
-CMD ["serve", "-p", "80"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

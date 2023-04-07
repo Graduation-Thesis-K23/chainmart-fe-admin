@@ -80,12 +80,14 @@ const MoreProductModal: FC<{
 
   return (
     <Modal
-      centered
       open={moreModal}
       title={null}
       onCancel={() => handleModal(false)}
       footer={null}
-      width={1400}
+      style={{
+        top: 20,
+      }}
+      width="100vw"
     >
       <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>

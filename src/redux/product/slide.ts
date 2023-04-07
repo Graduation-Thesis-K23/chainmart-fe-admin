@@ -3,6 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { RootState } from "../store";
+import { CategoryType } from "../category";
+import { SupplierType } from "../supplier";
 
 export interface ProductType {
   id: string;
@@ -12,8 +14,8 @@ export interface ProductType {
   quantity: number;
   images: string;
   created_at: string;
-  supplier: object;
-  category: object;
+  supplier: SupplierType;
+  category: CategoryType;
   slug: string;
   expiry_date: string;
   description: string;

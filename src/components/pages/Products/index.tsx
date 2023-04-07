@@ -18,18 +18,21 @@ import {
 } from "./styled";
 import { fetchProducts, ProductType } from "~/redux/product";
 import { useAppDispatch, useAppSelector } from "~/redux";
-import getS3Url from "~/utils/get-base-url-s3";
+import getS3Url from "~/utils/get-url-s3";
 
 const columns: ColumnsType<ProductType> = [
   {
     title: "Image",
     dataIndex: "image",
     key: "images",
-    width: "10%",
+    width: "80px",
     render: (_, record) => (
-      <div>
-        <img src={getS3Url(record.images.split(",")[0])} alt="product-image" />
-      </div>
+      <img
+        src={getS3Url(record.images.split(",")[0])}
+        alt="product-image"
+        width={50}
+        height={50}
+      />
     ),
   },
   {
@@ -51,18 +54,17 @@ const columns: ColumnsType<ProductType> = [
   {
     title: "Sale",
     dataIndex: "sale",
-    key: "sale",
     render: (_, { sale }) => <span>{sale ? sale : "0"}</span>,
   },
   {
     title: "Category",
     dataIndex: "category",
-    key: "category",
+    render: (_, { category }) => <span>{category.name}</span>,
   },
   {
-    title: "Category",
-    dataIndex: "category",
-    key: "category",
+    title: "Expiry Date",
+    dataIndex: "expiry_date",
+    render: (_, { expiry_date }) => <span>{expiry_date.substring(0, 10)}</span>,
   },
 ];
 
@@ -189,7 +191,7 @@ const ProductsManagement = () => {
         loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
-          y: "calc(100vh - 241px)",
+          y: "calc(100vh - 203px)",
         }}
         onRow={(record) => ({
           onClick: () => handleClickProduct(record.id),
