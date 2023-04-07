@@ -26,7 +26,7 @@ const MoreProductModal: FC<{
     setMoreModal(status);
   };
 
-  const { suppliers, categories } = useAppSelector((state) => state);
+  const { suppliers, categories, products } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
 
@@ -262,7 +262,11 @@ const MoreProductModal: FC<{
           </Col>
         </Row>
         <SubmitGroup>
-          <Button disabled={isSubmitting} onClick={handleSubmit(onSubmit)}>
+          <Button
+            disabled={isSubmitting}
+            onClick={handleSubmit(onSubmit)}
+            loading={!(products.status === ASYNC_STATUS.SUCCEED)}
+          >
             Save
           </Button>
         </SubmitGroup>
