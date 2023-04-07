@@ -48,6 +48,7 @@ export const productsSlice = createSlice({
       state.status = ASYNC_STATUS.LOADING;
     });
     builder.addCase(addProduct.fulfilled, (state, action) => {
+      state.status = ASYNC_STATUS.SUCCEED;
       state.data.push(action.payload as unknown as ProductType);
     });
   },
