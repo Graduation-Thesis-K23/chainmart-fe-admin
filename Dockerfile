@@ -1,4 +1,4 @@
-FROM node:16-alpine as deps
+FROM node:18-alpine as deps
 WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -9,7 +9,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
