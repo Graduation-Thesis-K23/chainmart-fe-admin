@@ -1,8 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
-import productList, { ProductType } from "../mocks/get-products";
+import instance from "~/services/axios-instance";
+import { RootState } from "../store";
 
+export interface ProductType {
+  id: string;
+  name: string;
+  price: number;
+  sale?: number;
+  quantity: number;
+  images: string;
+  created_at: string;
+  supplier: object;
+  category: object;
+  slug: string;
+  expiry_date: string;
+  description: string;
+  options: string;
+  specifications: string;
+  units_on_orders: number;
+  units_in_stocks: number;
+}
 export interface ProductsState {
   data: ProductType[];
   status: typeof ASYNC_STATUS[keyof typeof ASYNC_STATUS];
@@ -33,22 +52,31 @@ export const productsSlice = createSlice({
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  async (): Promise<ProductType[]> => await instance.get("/api/products"),
+  {
+    condition: (_, { getState }) => {
+      const rootState: RootState = getState() as RootState;
 
-    return productList;
+      const productsStateStatus = rootState.products.status;
+
+      if (
+        productsStateStatus === ASYNC_STATUS.LOADING ||
+        productsStateStatus === ASYNC_STATUS.SUCCEED
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    },
   }
 );
 
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (data: object) => {
-    const newProduct = {
-      key: Date.now(),
-      ...data,
-    };
-
-    return newProduct;
+    return await instance.postForm("/api/products", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 );
 

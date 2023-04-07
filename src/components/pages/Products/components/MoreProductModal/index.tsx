@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from "react";
-import { Modal, Row, Col } from "antd";
+import { Modal, Row, Col, Button } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types";
 import dayjs from "dayjs";
@@ -10,10 +10,11 @@ import Specifications from "./components/Specifications";
 import Images from "./components/Images";
 import Description from "./components/Description";
 
-import { useAppDispatch, useAppSelector } from "~/redux";
-import { SubmitGroup, SubmitButton } from "./styled";
+import { addProduct, useAppDispatch, useAppSelector } from "~/redux";
+import { SubmitGroup } from "./styled";
 import { ASYNC_STATUS, fetchSuppliers, fetchCategories } from "~/redux";
 import Log from "~/utils/Log";
+import { toast } from "react-toastify";
 
 const MoreProductModal: FC<{
   moreModal: boolean;
@@ -29,7 +30,11 @@ const MoreProductModal: FC<{
 
   const dispatch = useAppDispatch();
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
     defaultValues: {
       name: "",
       price: 0,
@@ -45,10 +50,27 @@ const MoreProductModal: FC<{
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    Log(data);
-    Log(dayjs(data.expiry_date, "YYYY-MM-DD").toDate());
-    setMoreModal(true);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    data.expiry_date = dayjs(data.expiry_date).toISOString();
+    if (data.sale === 0) {
+      delete data.sale;
+    }
+    const bodyFormData = new FormData();
+
+    for (const key in data.images) {
+      bodyFormData.append("images", data.images[key]);
+    }
+    delete data.images;
+    for (const key in data) {
+      bodyFormData.append(key, data[key]);
+    }
+
+    await dispatch(addProduct(bodyFormData));
+    toast.success("Add product success!", {
+      autoClose: 1000,
+      hideProgressBar: true,
+    });
+    handleModal(false);
   };
 
   useEffect(() => {
@@ -65,7 +87,7 @@ const MoreProductModal: FC<{
       footer={null}
       width={1400}
     >
-      <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+      <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>
           <Col span={24}>
             <Controller
@@ -240,7 +262,9 @@ const MoreProductModal: FC<{
           </Col>
         </Row>
         <SubmitGroup>
-          <SubmitButton type="submit" value="Save" />
+          <Button disabled={isSubmitting} onClick={handleSubmit(onSubmit)}>
+            Save
+          </Button>
         </SubmitGroup>
       </form>
     </Modal>

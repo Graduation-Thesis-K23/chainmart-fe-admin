@@ -16,19 +16,19 @@ import {
   MoreButtonGroup,
   CategoryButtonGroup,
 } from "./styled";
-import { ProductType } from "~/redux/mocks/get-products";
-import { fetchProducts } from "~/redux/product";
+import { fetchProducts, ProductType } from "~/redux/product";
 import { useAppDispatch, useAppSelector } from "~/redux";
+import getS3Url from "~/utils/get-base-url-s3";
 
 const columns: ColumnsType<ProductType> = [
   {
     title: "Image",
     dataIndex: "image",
-    key: "image",
+    key: "images",
     width: "10%",
     render: (_, record) => (
       <div>
-        <img src={record.image} alt="product-image" />
+        <img src={getS3Url(record.images.split(",")[0])} alt="product-image" />
       </div>
     ),
   },
@@ -37,37 +37,32 @@ const columns: ColumnsType<ProductType> = [
     dataIndex: "name",
     key: "name",
     width: "30%",
-    sorter: (a, b) => a.price - b.price,
   },
   {
     title: "Price",
     dataIndex: "price",
     key: "price",
-    sorter: (a, b) => a.price - b.price,
   },
   {
     title: "Quantity",
     dataIndex: "quantity",
     key: "quantity",
-    sorter: (a, b) => a.price - b.price,
   },
   {
     title: "Sale",
     dataIndex: "sale",
     key: "sale",
-    sorter: (a, b) => a.price - b.price,
+    render: (_, { sale }) => <span>{sale ? sale : "0"}</span>,
   },
   {
     title: "Category",
     dataIndex: "category",
     key: "category",
-    sorter: (a, b) => a.price - b.price,
   },
   {
     title: "Category",
     dataIndex: "category",
     key: "category",
-    sorter: (a, b) => a.price - b.price,
   },
 ];
 
@@ -190,13 +185,14 @@ const ProductsManagement = () => {
         dataSource={productsState.data}
         pagination={false}
         size="small"
+        rowKey="id"
         loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
           y: "calc(100vh - 241px)",
         }}
         onRow={(record) => ({
-          onClick: () => handleClickProduct(record.key),
+          onClick: () => handleClickProduct(record.id),
         })}
       />
       {moreModal && (
