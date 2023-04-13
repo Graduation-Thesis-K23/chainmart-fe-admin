@@ -7,7 +7,8 @@ const DatePicker: FC<{
   onChange: (...event: unknown[]) => void;
   name: string;
   label?: string;
-}> = ({ onChange, name, label }) => {
+  defaultValue?: dayjs.Dayjs;
+}> = ({ onChange, name, label, defaultValue = dayjs() }) => {
   const id = useId();
 
   return (
@@ -19,7 +20,7 @@ const DatePicker: FC<{
             width: "100%",
           }}
           onChange={onChange}
-          defaultValue={dayjs()}
+          defaultValue={defaultValue}
           name={name}
           format="YYYY/MM/DD"
           bordered={false}

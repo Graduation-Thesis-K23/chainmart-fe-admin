@@ -5,12 +5,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { productReducer } from "./product";
 import { categoryReducer } from "./category";
 import { supplierSlide } from "./supplier";
+import { productDetailReducer } from "./product-detail";
 
 const store = configureStore({
   reducer: {
     products: productReducer,
     categories: categoryReducer,
     suppliers: supplierSlide,
+    productDetail: productDetailReducer,
   },
 });
 

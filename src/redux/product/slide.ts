@@ -5,6 +5,7 @@ import instance from "~/services/axios-instance";
 import { RootState } from "../store";
 import { CategoryType } from "../category";
 import { SupplierType } from "../supplier";
+import { FieldValues } from "react-hook-form";
 
 export interface ProductType {
   id: string;
@@ -53,6 +54,16 @@ export const productsSlice = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data.push(action.payload as unknown as ProductType);
     });
+    builder.addCase(updateProduct.pending, (state) => {
+      state.status = ASYNC_STATUS.LOADING;
+    });
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.status = ASYNC_STATUS.SUCCEED;
+      const updated = action.payload as unknown as ProductType;
+      const index = state.data.findIndex((item) => item.id === updated.id);
+      state.data.splice(index, 1);
+      state.data.push(updated);
+    });
   },
 });
 
@@ -83,6 +94,15 @@ export const addProduct = createAsyncThunk(
     return await instance.postForm("/api/products", data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async (data: FieldValues) => {
+    const { id, ...newData } = data;
+
+    return await instance.patch("/api/products/" + id, newData);
   }
 );
 

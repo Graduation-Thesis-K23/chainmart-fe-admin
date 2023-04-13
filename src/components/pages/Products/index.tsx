@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useCallback } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -7,7 +7,6 @@ import MoreProductModal from "./components/MoreProductModal";
 import DetailProductModal from "./components/DetailProductModal";
 import CategoryDrawer from "./components/CategoryDrawer";
 
-import { ASYNC_STATUS } from "~/redux/constants";
 import {
   Products,
   Title,
@@ -16,9 +15,20 @@ import {
   MoreButtonGroup,
   CategoryButtonGroup,
 } from "./styled";
-import { fetchProducts, ProductType } from "~/redux/product";
-import { useAppDispatch, useAppSelector } from "~/redux";
+import {
+  ASYNC_STATUS,
+  useAppDispatch,
+  useAppSelector,
+  fetchProducts,
+  ProductType,
+} from "~/redux";
 import getS3Url from "~/utils/get-url-s3";
+
+export interface ProductUpdate
+  extends Omit<ProductType, "options,specifications"> {
+  specifications: string;
+  options: string;
+}
 
 const columns: ColumnsType<ProductType> = [
   {
@@ -71,24 +81,24 @@ const columns: ColumnsType<ProductType> = [
 const ProductsManagement = () => {
   const [moreModal, setMoreModal] = useState(false);
   const [detailModal, setDetailModal] = useState(false);
-  const [viewProductId, setViewProductId] = useState("");
+  const [viewProduct, setViewProduct] = useState({} as ProductUpdate);
   const [categoryDrawer, setCategoryDrawer] = useState(false);
 
   const productsState = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
 
-  const handleMoreModal = (status: boolean) => {
+  const handleMoreModal = useCallback((status: boolean) => {
     setMoreModal(status);
-  };
+  }, []);
 
-  const handleClickProduct = (id: string) => {
-    setViewProductId(id);
+  const handleClickProduct = useCallback((product: ProductUpdate) => {
+    setViewProduct(product);
     setDetailModal(true);
-  };
+  }, []);
 
-  const handleCategoryDrawer = (status: boolean) => {
+  const handleCategoryDrawer = useCallback((status: boolean) => {
     setCategoryDrawer(status);
-  };
+  }, []);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -194,7 +204,7 @@ const ProductsManagement = () => {
           y: "calc(100vh - 203px)",
         }}
         onRow={(record) => ({
-          onClick: () => handleClickProduct(record.id),
+          onClick: () => handleClickProduct(record),
         })}
       />
       {moreModal && (
@@ -204,7 +214,7 @@ const ProductsManagement = () => {
         <DetailProductModal
           detailModal={detailModal}
           setDetailModal={setDetailModal}
-          id={viewProductId}
+          product={viewProduct}
         />
       )}
       {categoryDrawer && (
