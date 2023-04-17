@@ -13,23 +13,23 @@ const withAuth = (Component: FC) => {
     const login = useAppSelector((state) => state.login);
     const dispatch = useAppDispatch();
 
+    console.log(login);
+
     useEffect(() => {
-      if (
-        login.status === ASYNC_STATUS.SUCCEED &&
-        login.status === ASYNC_STATUS.SUCCEED
-      ) {
+      if (login.status === ASYNC_STATUS.IDLE) {
+        console.log("s");
         dispatch(checkCookieToken());
       }
     }, []);
 
-    if (login.status === ASYNC_STATUS.IDLE) {
+    if (
+      login.status === ASYNC_STATUS.IDLE ||
+      login.status === ASYNC_STATUS.LOADING
+    ) {
       return <>loading</>;
     }
 
-    if (
-      login.status !== ASYNC_STATUS.SUCCEED &&
-      login.status !== ASYNC_STATUS.LOADING
-    ) {
+    if (login.status === ASYNC_STATUS.FAILED) {
       return <Navigate to="/login" replace />;
     }
 
