@@ -1,5 +1,6 @@
-import React, { FC, memo } from "react";
+import React, { FC } from "react";
 import { LineChart, Line } from "recharts";
+import withAuth from "~/hocs/withAuth";
 
 const data = [
   { name: "Page A", uv: 400, pv: 2400, amt: 2400 },
@@ -17,4 +18,4 @@ const Dashboard: FC = () => {
   );
 };
 
-export default memo(Dashboard);
+export default withAuth(Dashboard);

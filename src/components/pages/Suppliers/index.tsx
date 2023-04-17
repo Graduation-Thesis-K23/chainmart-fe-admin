@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, memo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "~/redux";
 import { ASYNC_STATUS } from "~/redux/constants";
 import MoreSupplierModal from "./components/MoreSupplierModal";
 import DetailSupplierModal from "./components/DetailSupplierModal";
+import withAuth from "~/hocs/withAuth";
 
 const columns: ColumnsType<SupplierType> = [
   {
@@ -122,4 +123,4 @@ const SuppliersManagement = () => {
   );
 };
 
-export default memo(SuppliersManagement);
+export default withAuth(SuppliersManagement);

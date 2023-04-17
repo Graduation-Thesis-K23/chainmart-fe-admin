@@ -1,7 +1,9 @@
 import React from "react";
 
+import withAuth from "~/hocs/withAuth";
+
 const OrdersManagement = () => {
   return <div>OrdersManagement</div>;
 };
 
-export default OrdersManagement;
+export default withAuth(OrdersManagement);

@@ -1,2 +1,2 @@
 export * from "./slide";
-export { default as supplierSlide } from "./slide";
+export { default as supplierReducer } from "./slide";

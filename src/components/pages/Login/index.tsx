@@ -1,20 +1,50 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import React, { useEffect } from "react";
+import { Button, Form, Input } from "antd";
+import { Navigate } from "react-router-dom";
 
 import { LoginContainer } from "./LoginStyled";
-import Log from "~/utils/Log";
+import {
+  ASYNC_STATUS,
+  useAppDispatch,
+  useAppSelector,
+  signIn,
+  checkCookieToken,
+} from "~/redux";
 
 interface SignInPayload {
   username: string;
   password: string;
-  remember: boolean;
 }
 
-const onFinish = (values: SignInPayload) => {
-  Log("Success:", values);
-};
-
 const Login = () => {
+  const { login } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+
+  const onFinish = (values: SignInPayload) => {
+    dispatch(signIn(values));
+  };
+
+  console.log("s");
+
+  useEffect(() => {
+    if (
+      login.status !== ASYNC_STATUS.SUCCEED &&
+      login.status !== ASYNC_STATUS.LOADING
+    )
+      dispatch(checkCookieToken());
+  }, []);
+
+  if (
+    login.status === ASYNC_STATUS.IDLE ||
+    login.status === ASYNC_STATUS.LOADING
+  ) {
+    return <>loading</>;
+  }
+
+  if (login.status === ASYNC_STATUS.SUCCEED) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <LoginContainer>
       <Form
@@ -22,7 +52,6 @@ const Login = () => {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
       >
@@ -42,13 +71,7 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+        <div>{login.message}</div>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">

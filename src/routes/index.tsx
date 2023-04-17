@@ -9,6 +9,7 @@ import {
   Employees,
   Orders,
   Suppliers,
+  NotFound,
 } from "~/components/pages";
 import MainLayout from "~/components/layouts/MainLayout";
 
@@ -63,7 +64,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Login />,
+    element: <NotFound />,
   },
 ]);
 

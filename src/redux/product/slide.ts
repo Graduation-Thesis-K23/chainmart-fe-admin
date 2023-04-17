@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { FieldValues } from "react-hook-form";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { RootState } from "../store";
 import { CategoryType } from "../category";
 import { SupplierType } from "../supplier";
-import { FieldValues } from "react-hook-form";
 
 export interface ProductType {
   id: string;
@@ -87,14 +87,12 @@ export const fetchProducts = createAsyncThunk(
     },
   }
 );
-
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (data: object) => {
-    return await instance.postForm("/api/products", data, {
+  async (data: object) =>
+    await instance.postForm("/api/products", data, {
       headers: { "Content-Type": "multipart/form-data" },
-    });
-  }
+    })
 );
 
 export const updateProduct = createAsyncThunk(

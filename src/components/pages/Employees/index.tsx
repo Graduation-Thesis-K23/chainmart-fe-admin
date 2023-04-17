@@ -1,7 +1,9 @@
-import React, { memo } from "react";
+import React from "react";
+
+import withAuth from "~/hocs/withAuth";
 
 const EmployeesManagement = () => {
   return <section>EmployeesManagement</section>;
 };
 
-export default memo(EmployeesManagement);
+export default withAuth(EmployeesManagement);

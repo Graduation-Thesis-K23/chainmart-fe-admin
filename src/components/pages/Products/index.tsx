@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Table } from "antd";
 import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -23,6 +23,7 @@ import {
   ProductType,
 } from "~/redux";
 import getS3Url from "~/utils/get-url-s3";
+import withAuth from "~/hocs/withAuth";
 
 export interface ProductUpdate
   extends Omit<ProductType, "options,specifications"> {
@@ -227,4 +228,4 @@ const ProductsManagement = () => {
   );
 };
 
-export default memo(ProductsManagement);
+export default withAuth(ProductsManagement);

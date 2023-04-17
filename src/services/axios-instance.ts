@@ -5,6 +5,7 @@ const instance = axios.create({
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : process.env.REACT_APP_BACKEND_URL,
+  withCredentials: true,
 });
 
 instance.interceptors.request.use(
@@ -21,7 +22,7 @@ instance.interceptors.response.use(
     return res.data;
   },
   (error) => {
-    return Promise.reject(error);
+    return Promise.resolve(error.response.data);
   }
 );
 
