@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { Navigate } from "react-router-dom";
 
+import Loading from "~/components/common/Loading";
+
 import { LoginContainer } from "./LoginStyled";
 import {
   ASYNC_STATUS,
@@ -24,8 +26,6 @@ const Login = () => {
     dispatch(signIn(values));
   };
 
-  console.log("s");
-
   useEffect(() => {
     if (
       login.status !== ASYNC_STATUS.SUCCEED &&
@@ -38,7 +38,7 @@ const Login = () => {
     login.status === ASYNC_STATUS.IDLE ||
     login.status === ASYNC_STATUS.LOADING
   ) {
-    return <>loading</>;
+    return <Loading />;
   }
 
   if (login.status === ASYNC_STATUS.SUCCEED) {

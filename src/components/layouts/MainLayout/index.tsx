@@ -1,11 +1,17 @@
 import React, { FC, ReactElement, memo } from "react";
-import { Layout, Menu, MenuProps } from "antd";
+import { Layout, Menu } from "antd";
+import type { MenuProps } from "antd";
 import {
   ShopOutlined,
   AreaChartOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { Header, HomeLink, Image } from "./styled";
+import logo from "~/assets/images/logo.png";
+import Avatar from "./Avatar";
+import { ASYNC_STATUS, useAppSelector } from "~/redux";
+import { LoadingLarge } from "~/components/common";
 
 const PAGES = {
   DASHBOARD: "DASHBOARD",
@@ -50,14 +56,23 @@ const items: MenuProps["items"] = [
 const MainLayout: FC<{
   children: ReactElement;
 }> = ({ children }) => {
+  const { status } = useAppSelector((state) => state.login);
+
+  if (status === ASYNC_STATUS.IDLE || status === ASYNC_STATUS.LOADING) {
+    return (
+      <>
+        {children}
+        <LoadingLarge />
+      </>
+    );
+  }
+
   return (
     <Layout>
-      <Layout.Sider width={250}>
-        <div
-          style={{
-            height: 64,
-          }}
-        ></div>
+      <Layout.Sider width={250} theme="light">
+        <HomeLink to="/">
+          <Image src={logo} alt="logo" height={50} />
+        </HomeLink>
         <Menu
           mode="inline"
           style={{
@@ -66,10 +81,11 @@ const MainLayout: FC<{
           items={items}
         />
       </Layout.Sider>
-      <Layout className="site-layout">
-        <Layout.Header>
-          <div>Chainmart</div>
-        </Layout.Header>
+      <Layout>
+        <Header>
+          <div />
+          <Avatar />
+        </Header>
         <Layout.Content>{children}</Layout.Content>
       </Layout>
     </Layout>

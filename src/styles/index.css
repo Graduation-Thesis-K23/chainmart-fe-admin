@@ -139,3 +139,8 @@ textarea {
 .ant-table-row {
   cursor: pointer;
 }
+
+.ant-dropdown-menu {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}

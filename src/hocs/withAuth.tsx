@@ -1,6 +1,8 @@
 import React, { FC, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
+import Loading from "~/components/common/Loading";
+
 import {
   ASYNC_STATUS,
   checkCookieToken,
@@ -13,11 +15,8 @@ const withAuth = (Component: FC) => {
     const login = useAppSelector((state) => state.login);
     const dispatch = useAppDispatch();
 
-    console.log(login);
-
     useEffect(() => {
       if (login.status === ASYNC_STATUS.IDLE) {
-        console.log("s");
         dispatch(checkCookieToken());
       }
     }, []);
@@ -26,7 +25,7 @@ const withAuth = (Component: FC) => {
       login.status === ASYNC_STATUS.IDLE ||
       login.status === ASYNC_STATUS.LOADING
     ) {
-      return <>loading</>;
+      return <Loading />;
     }
 
     if (login.status === ASYNC_STATUS.FAILED) {
