@@ -35,22 +35,30 @@ export const loginState = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(signIn.pending, (state) => {
-      state.status = ASYNC_STATUS.LOADING;
-      state.data = {} as unknown as User;
-    });
     builder.addCase(signIn.fulfilled, (state, { payload }) => {
-      state.status = ASYNC_STATUS.SUCCEED;
-      state.data = payload;
-      state.message = "";
+      if (payload.role !== "ADMIN") {
+        state.status = ASYNC_STATUS.FAILED;
+        state.data = {} as User;
+        state.message = "Your role not permission.";
+      } else {
+        state.status = ASYNC_STATUS.SUCCEED;
+        state.data = payload;
+        state.message = "";
+      }
     });
     builder.addCase(signIn.rejected, (state, action) => {
       state.status = ASYNC_STATUS.FAILED;
       state.message = action.error.message as unknown as string;
     });
     builder.addCase(checkCookieToken.fulfilled, (state, { payload }) => {
-      state.data = payload;
-      state.status = ASYNC_STATUS.SUCCEED;
+      if (payload.role !== "ADMIN") {
+        state.status = ASYNC_STATUS.FAILED;
+        state.data = {} as User;
+        state.message = "Your role not permission.";
+      } else {
+        state.data = payload;
+        state.status = ASYNC_STATUS.SUCCEED;
+      }
     });
     builder.addCase(checkCookieToken.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;

@@ -19,7 +19,7 @@ import withAuth from "~/hocs/withAuth";
 
 const columns: ColumnsType<SupplierType> = [
   {
-    title: "No",
+    title: "No.",
     width: "10%",
     render: (_, __, i) => <span>{i + 1}</span>,
   },
