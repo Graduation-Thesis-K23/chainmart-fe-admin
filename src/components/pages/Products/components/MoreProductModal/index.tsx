@@ -15,7 +15,7 @@ import { addProduct, useAppDispatch, useAppSelector } from "~/redux";
 import { SubmitGroup } from "./styled";
 import { ASYNC_STATUS, fetchSuppliers } from "~/redux";
 import Log from "~/utils/Log";
-import categories from "~/shared/categories";
+import categories from "~/sub-categories/categories";
 import TranslateFunc from "~/utils/dictionary";
 
 const MoreProductModal: FC<{

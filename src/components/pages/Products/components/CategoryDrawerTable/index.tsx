@@ -3,7 +3,7 @@ import { Table, Image } from "antd";
 import { ColumnsType } from "antd/es/table";
 
 import { CategoryType } from "~/shared";
-import categories from "~/shared/categories";
+import categories from "~/sub-categories/categories";
 import Translate from "~/components/common/Translate";
 
 const CategoryDrawerTable = () => {
