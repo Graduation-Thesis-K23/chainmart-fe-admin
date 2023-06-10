@@ -3,6 +3,7 @@ import { Modal, Row, Col, Button } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 import { Input, Select, DatePicker } from "~/components/common";
 import Options from "./components/Options";
@@ -12,9 +13,10 @@ import Description from "./components/Description";
 
 import { addProduct, useAppDispatch, useAppSelector } from "~/redux";
 import { SubmitGroup } from "./styled";
-import { ASYNC_STATUS, fetchSuppliers, fetchCategories } from "~/redux";
+import { ASYNC_STATUS, fetchSuppliers } from "~/redux";
 import Log from "~/utils/Log";
-import { toast } from "react-toastify";
+import categories from "~/shared/categories";
+import TranslateFunc from "~/utils/dictionary";
 
 const MoreProductModal: FC<{
   moreModal: boolean;
@@ -26,7 +28,7 @@ const MoreProductModal: FC<{
     setMoreModal(status);
   };
 
-  const { suppliers, categories, products } = useAppSelector((state) => state);
+  const { suppliers, products } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
 
@@ -74,7 +76,6 @@ const MoreProductModal: FC<{
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
     dispatch(fetchSuppliers());
   }, []);
 
@@ -184,11 +185,11 @@ const MoreProductModal: FC<{
                 <Select
                   label="Category"
                   onChange={onChange}
-                  loading={!(categories.status === ASYNC_STATUS.SUCCEED)}
+                  defaultValue={TranslateFunc(categories[0].textKey)}
                   options={[
-                    ...categories.data.map((i) => ({
-                      value: i.id,
-                      label: i.name,
+                    ...categories.map((i) => ({
+                      value: TranslateFunc(i.textKey),
+                      label: TranslateFunc(i.textKey),
                     })),
                   ]}
                 />
