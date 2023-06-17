@@ -13,8 +13,8 @@ import {
   checkCookieToken,
 } from "~/redux";
 
-interface SignInPayload {
-  username: string;
+export interface SignInPayload {
+  phone: string;
   password: string;
 }
 
@@ -56,8 +56,8 @@ const Login = () => {
         autoComplete="off"
       >
         <Form.Item
-          label="Username"
-          name="username"
+          label="Account"
+          name="phone"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />
