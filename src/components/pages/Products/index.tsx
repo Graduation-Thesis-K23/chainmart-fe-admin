@@ -24,11 +24,10 @@ import {
 } from "~/redux";
 import getS3Url from "~/utils/get-url-s3";
 import withAuth from "~/hocs/withAuth";
+import TranslateFunc from "~/utils/dictionary";
 
-export interface ProductUpdate
-  extends Omit<ProductType, "options,specifications"> {
+export interface ProductUpdate extends Omit<ProductType, "specifications"> {
   specifications: string;
-  options: string;
 }
 
 const columns: ColumnsType<ProductType> = [
@@ -53,29 +52,36 @@ const columns: ColumnsType<ProductType> = [
     width: "30%",
   },
   {
+    title: "Sold",
+    dataIndex: "sold",
+    key: "sold",
+  },
+  {
     title: "Price",
     dataIndex: "price",
     key: "price",
   },
   {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity",
-  },
-  {
     title: "Sale",
     dataIndex: "sale",
-    render: (_, { sale }) => <span>{sale ? sale : "0"}</span>,
+    key: "sale",
+  },
+  {
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+  },
+  {
+    title: "Create At",
+    dataIndex: "created_at",
+    render: (_, { created_at }) => (
+      <span>{new Date(created_at).toLocaleDateString("vn-VN")}</span>
+    ),
   },
   {
     title: "Category",
     dataIndex: "category",
-    render: (_, { category }) => <span>{category.name}</span>,
-  },
-  {
-    title: "Expiry Date",
-    dataIndex: "expiry_date",
-    render: (_, { expiry_date }) => <span>{expiry_date.substring(0, 10)}</span>,
+    render: (_, { category }) => <span>{TranslateFunc(category)}</span>,
   },
 ];
 

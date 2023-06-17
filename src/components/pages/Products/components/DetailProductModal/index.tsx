@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Button, Col, Modal, Row } from "antd";
 import {
   Controller,
@@ -6,26 +6,31 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import dayjs from "dayjs";
 import { toast } from "react-toastify";
 
-import { Select, Input, DatePicker } from "~/components/common";
+import { Select, Input } from "~/components/common";
 
 import Description from "./components/Description";
-import Options, { OptionType } from "./components/Options";
 import Specifications, {
   SpecificationsType,
 } from "./components/Specifications";
 import { SubmitGroup } from "./styled";
 import { ProductUpdate } from "../..";
-import { updateProduct, useAppDispatch, useAppSelector } from "~/redux";
+import {
+  fetchSuppliers,
+  updateProduct,
+  useAppDispatch,
+  useAppSelector,
+} from "~/redux";
+import categories from "~/sub-categories/categories";
+import TranslateFunc from "~/utils/dictionary";
 
 const DetailModal: FC<{
   detailModal: boolean;
   setDetailModal: React.Dispatch<React.SetStateAction<boolean>>;
   product: ProductUpdate;
 }> = ({ setDetailModal, detailModal, product }) => {
-  const { categories, suppliers } = useAppSelector((state) => state);
+  const { suppliers } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
 
@@ -61,6 +66,10 @@ const DetailModal: FC<{
       toast.error("Product not update");
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchSuppliers());
+  }, []);
 
   return (
     <Modal
@@ -112,23 +121,6 @@ const DetailModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="quantity"
-              control={control}
-              render={({ field: { ref, onChange, value, name } }) => (
-                <Input
-                  label="Quantity"
-                  inputRef={ref}
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                  type="number"
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-          <Col span={6}>
-            <Controller
               name="sale"
               control={control}
               render={({ field: { ref, onChange, value, name } }) => (
@@ -146,34 +138,17 @@ const DetailModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="expiry_date"
-              control={control}
-              render={({ field: { onChange, name } }) => (
-                <DatePicker
-                  label="Expiry Date"
-                  onChange={onChange}
-                  defaultValue={dayjs(product.expiry_date)}
-                  name={name}
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-        </Row>
-        <Row gutter={[24, 24]}>
-          <Col span={6}>
-            <Controller
               name="category"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
                   label="Category"
                   onChange={onChange}
-                  defaultValue={product.category.name}
+                  defaultValue={product.category}
                   options={[
-                    ...categories.data.map((i) => ({
-                      value: i.id,
-                      label: i.name,
+                    ...categories.map((i) => ({
+                      value: i.textKey,
+                      label: TranslateFunc(i.textKey),
                     })),
                   ]}
                 />
@@ -181,7 +156,7 @@ const DetailModal: FC<{
               rules={{ required: true }}
             />
           </Col>
-          <Col span={18}>
+          <Col span={6}>
             <Controller
               name="supplier"
               control={control}
@@ -206,19 +181,6 @@ const DetailModal: FC<{
         <Row gutter={[24, 24]}>
           <Col span={12}>
             <Controller
-              name="options"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Options
-                  onChange={onChange}
-                  defaultValue={JSON.parse(product.options) as OptionType[]}
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-          <Col span={12}>
-            <Controller
               name="specifications"
               control={control}
               render={({ field: { onChange } }) => (
@@ -232,20 +194,20 @@ const DetailModal: FC<{
               rules={{ required: true }}
             />
           </Col>
-        </Row>
-        <Row gutter={[24, 24]}>
-          <Col span={24}>
-            <Controller
-              name="description"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Description
-                  onChange={onChange}
-                  defaultValue={product.description}
-                />
-              )}
-              rules={{ required: true }}
-            />
+          <Col span={12}>
+            <Col span={24}>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <Description
+                    onChange={onChange}
+                    defaultValue={product.description}
+                  />
+                )}
+                rules={{ required: true }}
+              />
+            </Col>
           </Col>
         </Row>
         <SubmitGroup>

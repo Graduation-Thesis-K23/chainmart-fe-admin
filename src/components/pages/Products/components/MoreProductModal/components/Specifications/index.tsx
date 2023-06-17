@@ -6,6 +6,7 @@ import {
   SpecificationsHeader,
   SpecificationsLabel,
   SpecificationsList,
+  SpecificationsSub,
 } from "./styled";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Log from "~/utils/Log";
@@ -22,13 +23,9 @@ const Specifications: FC<{ onChange: (...event: unknown[]) => void }> = ({
   Log("Specifications");
 
   const [moreSpecifications, setMoreSpecifications] = useState(false);
-  const [specifications, setSpecifications] = useState<SpecificationsType[]>([
-    {
-      id: Date.now().toString(),
-      key: "Color",
-      value: "Yellow",
-    },
-  ]);
+  const [specifications, setSpecifications] = useState<SpecificationsType[]>(
+    []
+  );
 
   const initFormValues = {
     key: "",
@@ -58,6 +55,12 @@ const Specifications: FC<{ onChange: (...event: unknown[]) => void }> = ({
     handleMoreSpecifications(false);
   };
 
+  const handleRemoteSpecifications = (id: string) => {
+    const newSpec = specifications.filter((spec) => spec.id !== id);
+
+    setSpecifications(newSpec);
+  };
+
   useEffect(() => {
     onChange(JSON.stringify(specifications));
 
@@ -81,10 +84,17 @@ const Specifications: FC<{ onChange: (...event: unknown[]) => void }> = ({
 
       <SpecificationsList>
         <div>
-          {specifications.map((spec) => (
-            <div key={spec.id}>
-              + {spec.key}: {spec.value}
-            </div>
+          {specifications.map((spec, index) => (
+            <p key={spec.id}>
+              <span>
+                {index + 1}. {spec.key}: {spec.value}
+              </span>
+              <SpecificationsSub
+                onClick={() => handleRemoteSpecifications(spec.id)}
+              >
+                Remove
+              </SpecificationsSub>
+            </p>
           ))}
         </div>
 

@@ -4,7 +4,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 import { SupplierType, updateSupplier } from "~/redux/supplier";
-import { Input, Select } from "~/components/common";
+import { Input } from "~/components/common";
 
 import { CancelButton, FooterForm } from "../../styled";
 import Log from "~/utils/Log";
@@ -128,56 +128,30 @@ const DetailSupplierModal: FC<{
             <Controller
               name="region"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
+              render={({ field: { onChange, name, ref, value } }) => (
+                <Input
                   label="Region"
                   onChange={onChange}
-                  defaultValue={supplier.region}
-                  options={[
-                    {
-                      value: "jack",
-                      label: "Jack",
-                    },
-                    {
-                      value: "lucy",
-                      label: "Lucy",
-                    },
-                    {
-                      value: "tom",
-                      label: "Tom",
-                    },
-                  ]}
+                  name={name}
+                  value={value}
+                  inputRef={ref}
                 />
               )}
-              defaultValue={supplier.region}
             />
           </Col>
           <Col xs={12} xl={12}>
             <Controller
               name="country"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
+              render={({ field: { onChange, name, ref, value } }) => (
+                <Input
                   label="Country"
                   onChange={onChange}
-                  defaultValue={supplier.country}
-                  options={[
-                    {
-                      value: "1",
-                      label: "12",
-                    },
-                    {
-                      value: "45",
-                      label: "45",
-                    },
-                    {
-                      value: "78",
-                      label: "78",
-                    },
-                  ]}
+                  name={name}
+                  value={value}
+                  inputRef={ref}
                 />
               )}
-              defaultValue={supplier.country}
             />
           </Col>
         </Row>

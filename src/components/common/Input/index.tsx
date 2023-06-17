@@ -47,6 +47,7 @@ const Input: FC<{
           value={value}
           name={name}
           ref={inputRef}
+          autoComplete="off"
         />
         <SpanLabel></SpanLabel>
       </InputG>

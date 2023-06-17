@@ -12,9 +12,8 @@ export interface RejectedPayload {
 }
 
 export interface User {
-  email: string;
+  phone: string;
   name: string;
-  username: string;
   role: string;
 }
 
@@ -121,7 +120,7 @@ export const checkCookieToken = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "login/logout",
-  async () => await instance.get("/api/auth/logout")
+  async () => await instance.get("/api/auth-manager/logout")
 );
 
 export default loginState.reducer;

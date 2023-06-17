@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { productReducer } from "./product";
-import { categoryReducer } from "./category";
 import { supplierReducer } from "./supplier";
 import { productDetailReducer } from "./product-detail";
 import { loginReducer } from "./login";
@@ -11,7 +10,6 @@ import { loginReducer } from "./login";
 const store = configureStore({
   reducer: {
     products: productReducer,
-    categories: categoryReducer,
     suppliers: supplierReducer,
     productDetail: productDetailReducer,
     login: loginReducer,

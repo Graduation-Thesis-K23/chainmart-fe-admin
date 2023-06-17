@@ -20,4 +20,16 @@ export const SpecificationsList = styled.div`
   padding: 6px;
   background-color: #eee;
   min-height: 100px;
+  min-height: 342px;
+`;
+
+export const SpecificationsSub = styled.span`
+  display: inline-block;
+  padding: 2px 10px;
+  margin-left: 20px;
+  line-height: 16px;
+  border: 1px solid;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
 `;

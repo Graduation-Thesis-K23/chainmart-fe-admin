@@ -4,7 +4,6 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   Dashboard,
   Products,
-  Settings,
   Login,
   Employees,
   Orders,
@@ -53,10 +52,6 @@ const router = createBrowserRouter([
         <Suppliers />
       </MainLayout>
     ),
-  },
-  {
-    path: "/settings",
-    element: <Settings />,
   },
   {
     path: "/login",
