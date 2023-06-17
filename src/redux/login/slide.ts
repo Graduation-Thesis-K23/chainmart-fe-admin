@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { FieldValues } from "react-hook-form";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { RootState } from "../store";
+import { SignInPayload } from "~/components/pages/Login";
 
 export interface RejectedPayload {
   statusCode: number;
@@ -71,10 +71,14 @@ export const loginState = createSlice({
 
 export const signIn = createAsyncThunk(
   "login/signIn",
-  async (data: FieldValues): Promise<User> => {
-    const { username, password } = data;
-    const response = await instance.post("/api/auth/sign-in", {
-      username,
+  async (data: SignInPayload): Promise<User> => {
+    const { phone, password } = data;
+    console.log({
+      phone,
+      password,
+    });
+    const response = await instance.post("/api/auth-manager/sign-in", {
+      phone,
       password,
     });
 
@@ -89,7 +93,7 @@ export const signIn = createAsyncThunk(
 export const checkCookieToken = createAsyncThunk(
   "login/checkCookie",
   async (): Promise<User> => {
-    const response = await instance.post("/api/auth/check-token");
+    const response = await instance.post("/api/auth-manager/check-token");
 
     if ("message" in response) {
       return Promise.reject(response);
