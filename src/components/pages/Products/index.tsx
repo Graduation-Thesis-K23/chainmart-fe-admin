@@ -1,7 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Table } from "antd";
-import { AppstoreAddOutlined, ContainerOutlined } from "@ant-design/icons";
-import { ColumnsType } from "antd/es/table";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import { Button, Space, Table, Input, InputRef } from "antd";
+import {
+  AppstoreAddOutlined,
+  ContainerOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { ColumnsType, ColumnType } from "antd/es/table";
+import Highlighter from "react-highlight-words";
 
 import MoreProductModal from "./components/MoreProductModal";
 import DetailProductModal from "./components/DetailProductModal";
@@ -24,66 +29,22 @@ import {
 } from "~/redux";
 import getS3Url from "~/utils/get-url-s3";
 import withAuth from "~/hocs/withAuth";
+import TranslateFunc from "~/utils/dictionary";
+import { FilterConfirmProps } from "antd/es/table/interface";
 
-export interface ProductUpdate
-  extends Omit<ProductType, "options,specifications"> {
+export interface ProductUpdate extends Omit<ProductType, "specifications"> {
   specifications: string;
-  options: string;
 }
-
-const columns: ColumnsType<ProductType> = [
-  {
-    title: "Image",
-    dataIndex: "image",
-    key: "images",
-    width: "80px",
-    render: (_, record) => (
-      <img
-        src={getS3Url(record.images.split(",")[0])}
-        alt="product-image"
-        width={50}
-        height={50}
-      />
-    ),
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    width: "30%",
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity",
-  },
-  {
-    title: "Sale",
-    dataIndex: "sale",
-    render: (_, { sale }) => <span>{sale ? sale : "0"}</span>,
-  },
-  {
-    title: "Category",
-    dataIndex: "category",
-    render: (_, { category }) => <span>{category.name}</span>,
-  },
-  {
-    title: "Expiry Date",
-    dataIndex: "expiry_date",
-    render: (_, { expiry_date }) => <span>{expiry_date.substring(0, 10)}</span>,
-  },
-];
 
 const ProductsManagement = () => {
   const [moreModal, setMoreModal] = useState(false);
   const [detailModal, setDetailModal] = useState(false);
   const [viewProduct, setViewProduct] = useState({} as ProductUpdate);
   const [categoryDrawer, setCategoryDrawer] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef<InputRef>(null);
 
   const productsState = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
@@ -101,24 +62,31 @@ const ProductsManagement = () => {
     setCategoryDrawer(status);
   }, []);
 
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
-
-  /*  const handleSearch = (
+  const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
-    dataIndex: keyof DataType
+    dataIndex: keyof ProductType
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
 
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText("");
+  };
+
   const getColumnSearchProps = (
-    dataIndex: keyof DataType
-  ): ColumnType<DataType> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, close }) => (
+    dataIndex: keyof ProductType
+  ): ColumnType<ProductType> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
@@ -145,6 +113,24 @@ const ProductsManagement = () => {
             Search
           </Button>
           <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
             type="link"
             size="small"
             onClick={() => {
@@ -157,9 +143,13 @@ const ProductsManagement = () => {
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
-
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
@@ -176,7 +166,82 @@ const ProductsManagement = () => {
       ) : (
         text
       ),
-  }); */
+  });
+
+  const columns: ColumnsType<ProductType> = [
+    {
+      title: "Image",
+      dataIndex: "image",
+      key: "images",
+      width: "80px",
+      render: (_, record) => (
+        <img
+          src={getS3Url(record.images.split(",")[0])}
+          alt="product-image"
+          width={50}
+          height={50}
+        />
+      ),
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      width: "30%",
+      ...getColumnSearchProps("name"),
+    },
+    {
+      title: "Sold",
+      dataIndex: "sold",
+      key: "sold",
+      sorter: (a, b) => a.sold - b.sold,
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      sorter: (a, b) => a.price - b.price,
+    },
+    {
+      title: "Sale",
+      dataIndex: "sale",
+      key: "sale",
+      sorter: (a, b) => a.sale - b.sale,
+    },
+    {
+      title: "Rating",
+      dataIndex: "rating",
+      key: "rating",
+      sorter: (a, b) => a.rating - b.rating,
+    },
+    {
+      title: "Create At",
+      dataIndex: "created_at",
+      sorter: (a, b) => (a.created_at > b.created_at ? 1 : -1),
+      render: (_, { created_at }) => (
+        <span>
+          {new Date(created_at).toLocaleString("en-EN", {
+            timeZone: "Asia/Ho_Chi_Minh",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      sorter: (a, b) => (a.category > b.category ? 1 : -1),
+      render: (_, { category }) => <span>{TranslateFunc(category)}</span>,
+    },
+  ];
+
+  const handleChangePagination = (page: number, pageSize: number) => {
+    console.log(page);
+    console.log(pageSize);
+  };
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   return (
     <Products>
@@ -196,13 +261,17 @@ const ProductsManagement = () => {
       <Table
         columns={columns}
         dataSource={productsState.data}
-        pagination={false}
         size="small"
         rowKey="id"
         loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
           y: "calc(100vh - 203px)",
+        }}
+        pagination={{
+          defaultCurrent: 1,
+          position: ["bottomCenter"],
+          onChange: (page, pageSize) => handleChangePagination(page, pageSize),
         }}
         onRow={(record) => ({
           onClick: () => handleClickProduct(record),

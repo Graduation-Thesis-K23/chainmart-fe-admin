@@ -3,7 +3,7 @@ import { Col, Modal, Row } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import { Input, Select } from "~/components/common";
+import { Input } from "~/components/common";
 
 import { addSupplier, AddSupplierType } from "~/redux/supplier";
 import { useAppDispatch } from "~/redux";
@@ -118,24 +118,12 @@ const MoreSupplierModal: FC<{
             <Controller
               name="region"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
+              render={({ field: { onChange, name, ref } }) => (
+                <Input
                   label="Region"
                   onChange={onChange}
-                  options={[
-                    {
-                      value: "jack",
-                      label: "Jack",
-                    },
-                    {
-                      value: "lucy",
-                      label: "Lucy",
-                    },
-                    {
-                      value: "tom",
-                      label: "Tom",
-                    },
-                  ]}
+                  name={name}
+                  inputRef={ref}
                 />
               )}
             />
@@ -144,24 +132,12 @@ const MoreSupplierModal: FC<{
             <Controller
               name="country"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
+              render={({ field: { onChange, name, ref } }) => (
+                <Input
                   label="Country"
                   onChange={onChange}
-                  options={[
-                    {
-                      value: "1",
-                      label: "12",
-                    },
-                    {
-                      value: "45",
-                      label: "45",
-                    },
-                    {
-                      value: "78",
-                      label: "78",
-                    },
-                  ]}
+                  name={name}
+                  inputRef={ref}
                 />
               )}
             />

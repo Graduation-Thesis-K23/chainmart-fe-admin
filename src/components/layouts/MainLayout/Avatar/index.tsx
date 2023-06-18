@@ -15,10 +15,6 @@ const Avatar = () => {
 
   const items: MenuProps["items"] = [
     {
-      key: "2",
-      label: <a href="/settings">Settings</a>,
-    },
-    {
       key: "3",
       label: <p onClick={handleLogout}>Logout</p>,
     },
@@ -36,7 +32,7 @@ const Avatar = () => {
           {status === ASYNC_STATUS.SUCCEED ? (
             <>
               <Name>{data.name}</Name>
-              <Email>{data.email}</Email>
+              <Email>{data.phone}</Email>
             </>
           ) : (
             <></>

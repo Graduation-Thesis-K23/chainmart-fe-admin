@@ -4,26 +4,22 @@ import { FieldValues } from "react-hook-form";
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { RootState } from "../store";
-import { CategoryType } from "../category";
 import { SupplierType } from "../supplier";
 
 export interface ProductType {
   id: string;
   name: string;
   price: number;
-  sale?: number;
-  quantity: number;
+  sale: number;
+  rating: number;
   images: string;
   created_at: string;
   supplier: SupplierType;
-  category: CategoryType;
+  category: string;
   slug: string;
-  expiry_date: string;
   description: string;
-  options: string;
+  sold: number;
   specifications: string;
-  units_on_orders: number;
-  units_in_stocks: number;
 }
 export interface ProductsState {
   data: ProductType[];
@@ -89,10 +85,15 @@ export const fetchProducts = createAsyncThunk(
 );
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (data: object) =>
-    await instance.postForm("/api/products", data, {
+  async (data: object) => {
+    const newProduct = await instance.postForm("/api/products", data, {
       headers: { "Content-Type": "multipart/form-data" },
-    })
+    });
+
+    console.log(newProduct);
+
+    return newProduct;
+  }
 );
 
 export const updateProduct = createAsyncThunk(

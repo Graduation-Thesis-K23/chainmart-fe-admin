@@ -1,12 +1,10 @@
 import React, { useEffect, FC } from "react";
 import { Modal, Row, Col, Button } from "antd";
 import { useForm, Controller } from "react-hook-form";
-import { FieldValues, SubmitHandler } from "react-hook-form/dist/types";
-import dayjs from "dayjs";
-import { toast } from "react-toastify";
+import { SubmitHandler } from "react-hook-form/dist/types";
 
-import { Input, Select, DatePicker } from "~/components/common";
-import Options from "./components/Options";
+import { Input, Select } from "~/components/common";
+
 import Specifications from "./components/Specifications";
 import Images from "./components/Images";
 import Description from "./components/Description";
@@ -17,6 +15,18 @@ import { ASYNC_STATUS, fetchSuppliers } from "~/redux";
 import Log from "~/utils/Log";
 import categories from "~/sub-categories/categories";
 import TranslateFunc from "~/utils/dictionary";
+import { toast } from "react-toastify";
+
+interface MoreProduct {
+  name: string;
+  price: number;
+  sale: number;
+  images: [];
+  category: string;
+  supplier: string;
+  specifications: string;
+  description: string;
+}
 
 const MoreProductModal: FC<{
   moreModal: boolean;
@@ -32,39 +42,43 @@ const MoreProductModal: FC<{
 
   const dispatch = useAppDispatch();
 
+  const defaultValues: MoreProduct = {
+    name: "",
+    price: 0,
+    sale: 0,
+    images: [],
+    category: "",
+    supplier: "",
+    specifications: "",
+    description: "",
+  };
+
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
-    defaultValues: {
-      name: "",
-      price: 0,
-      sale: 0,
-      quantity: 0,
-      images: [],
-      category: "",
-      supplier: "",
-      expiry_date: dayjs(),
-      options: "",
-      specifications: "",
-      description: "",
-    },
+    defaultValues,
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    data.expiry_date = dayjs(data.expiry_date).toISOString();
-    if (data.sale === 0) {
-      delete data.sale;
-    }
+  const onSubmit: SubmitHandler<MoreProduct> = async (data) => {
     const bodyFormData = new FormData();
-
-    for (const key in data.images) {
-      bodyFormData.append("images", data.images[key]);
+    for (const image of data.images) {
+      bodyFormData.append("images", image);
     }
-    delete data.images;
     for (const key in data) {
-      bodyFormData.append(key, data[key]);
+      if (key === "images") {
+        continue;
+      }
+
+      if (key === "sale") {
+        const sale = data[key as keyof typeof data];
+
+        bodyFormData.append("sale", sale as string);
+        continue;
+      }
+
+      bodyFormData.append(key, data[key as keyof MoreProduct] as string);
     }
 
     await dispatch(addProduct(bodyFormData));
@@ -129,23 +143,6 @@ const MoreProductModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="quantity"
-              control={control}
-              render={({ field: { ref, onChange, value, name } }) => (
-                <Input
-                  label="Quantity"
-                  inputRef={ref}
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                  type="number"
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-          <Col span={6}>
-            <Controller
               name="sale"
               control={control}
               render={({ field: { ref, onChange, value, name } }) => (
@@ -163,42 +160,6 @@ const MoreProductModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="expiry_date"
-              control={control}
-              render={({ field: { onChange, name } }) => (
-                <DatePicker
-                  label="Expiry Date"
-                  onChange={onChange}
-                  name={name}
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-        </Row>
-        <Row gutter={[24, 24]}>
-          <Col span={6}>
-            <Controller
-              name="category"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Select
-                  label="Category"
-                  onChange={onChange}
-                  defaultValue={TranslateFunc(categories[0].textKey)}
-                  options={[
-                    ...categories.map((i) => ({
-                      value: TranslateFunc(i.textKey),
-                      label: TranslateFunc(i.textKey),
-                    })),
-                  ]}
-                />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-          <Col span={18}>
-            <Controller
               name="supplier"
               control={control}
               render={({ field: { onChange } }) => (
@@ -210,6 +171,26 @@ const MoreProductModal: FC<{
                     ...suppliers.data.map((i) => ({
                       value: i.id,
                       label: i.name,
+                    })),
+                  ]}
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
+          <Col span={6}>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Select
+                  label="Category"
+                  onChange={onChange}
+                  defaultValue={TranslateFunc(categories[0].textKey)}
+                  options={[
+                    ...categories.map((i) => ({
+                      value: i.textKey,
+                      label: TranslateFunc(i.textKey),
                     })),
                   ]}
                 />
@@ -233,16 +214,6 @@ const MoreProductModal: FC<{
         <Row gutter={[24, 24]}>
           <Col span={12}>
             <Controller
-              name="options"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Options onChange={onChange} />
-              )}
-              rules={{ required: true }}
-            />
-          </Col>
-          <Col span={12}>
-            <Controller
               name="specifications"
               control={control}
               render={({ field: { onChange } }) => (
@@ -251,9 +222,7 @@ const MoreProductModal: FC<{
               rules={{ required: true }}
             />
           </Col>
-        </Row>
-        <Row gutter={[24, 24]}>
-          <Col span={24}>
+          <Col span={12}>
             <Controller
               name="description"
               control={control}
@@ -264,6 +233,7 @@ const MoreProductModal: FC<{
             />
           </Col>
         </Row>
+        <Row gutter={[24, 24]}></Row>
         <SubmitGroup>
           <Button
             disabled={isSubmitting}
