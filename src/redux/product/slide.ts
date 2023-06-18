@@ -10,13 +10,15 @@ export interface ProductType {
   id: string;
   name: string;
   price: number;
-  sale?: number;
+  sale: number;
+  rating: number;
   images: string;
   created_at: string;
   supplier: SupplierType;
   category: string;
   slug: string;
   description: string;
+  sold: number;
   specifications: string;
 }
 export interface ProductsState {
