@@ -6,6 +6,7 @@ import { productReducer } from "./product";
 import { supplierReducer } from "./supplier";
 import { productDetailReducer } from "./product-detail";
 import { loginReducer } from "./login";
+import { branchReducer } from "./branch";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     suppliers: supplierReducer,
     productDetail: productDetailReducer,
     login: loginReducer,
+    branch: branchReducer,
   },
 });
 
