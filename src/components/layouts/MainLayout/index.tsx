@@ -19,6 +19,7 @@ const PAGES = {
   EMPLOYEES: "EMPLOYEES",
   ORDERS: "ORDERS",
   SUPPLIERS: "SUPPLIERS",
+  BRANCH: "BRANCH",
 };
 
 const items: MenuProps["items"] = [
@@ -45,6 +46,11 @@ const items: MenuProps["items"] = [
     key: PAGES.ORDERS,
     icon: <UsergroupAddOutlined />,
     label: <Link to="/orders">Orders Management</Link>,
+  },
+  {
+    key: PAGES.BRANCH,
+    icon: <UsergroupAddOutlined />,
+    label: <Link to="/branch">Branch Management</Link>,
   },
   {
     key: PAGES.SUPPLIERS,

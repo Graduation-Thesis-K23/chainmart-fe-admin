@@ -9,6 +9,7 @@ import {
   Orders,
   Suppliers,
   NotFound,
+  Branch,
 } from "~/components/pages";
 import MainLayout from "~/components/layouts/MainLayout";
 
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
     element: (
       <MainLayout>
         <Orders />
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/branch",
+    element: (
+      <MainLayout>
+        <Branch />
       </MainLayout>
     ),
   },
