@@ -6,3 +6,4 @@ export { default as Employees } from "./Employees";
 export { default as Orders } from "./Orders";
 export { default as Suppliers } from "./Suppliers";
 export { default as NotFound } from "./404";
+export { default as Branch } from "./Branch";
