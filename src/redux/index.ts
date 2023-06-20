@@ -6,3 +6,4 @@ export * from "./product";
 export * from "./product-detail";
 export * from "./login";
 export * from "./branch";
+export * from "./employee";

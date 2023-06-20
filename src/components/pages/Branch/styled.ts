@@ -11,12 +11,6 @@ export const BranchHeader = styled.div`
   align-items: center;
 `;
 
-export const Title = styled.p`
-  padding: 10px 0;
-  font-size: 32px;
-  font-weight: 700;
-`;
-
 export const MoreButtonGroup = styled.div`
   display: inline;
   padding: 8px 12px;

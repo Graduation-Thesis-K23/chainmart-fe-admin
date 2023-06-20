@@ -14,12 +14,12 @@ import CategoryDrawer from "./components/CategoryDrawer";
 
 import {
   Products,
-  Title,
   ProductsHeader,
   MoreButton,
   MoreButtonGroup,
   CategoryButtonGroup,
 } from "./styled";
+import PageTitle from "~/components/common/PageTitle";
 import {
   ASYNC_STATUS,
   useAppDispatch,
@@ -246,7 +246,7 @@ const ProductsManagement = () => {
   return (
     <Products>
       <ProductsHeader>
-        <Title>Products Management</Title>
+        <PageTitle text="Orders Management" />
         <div>
           <CategoryButtonGroup onClick={() => handleCategoryDrawer(true)}>
             <ContainerOutlined />

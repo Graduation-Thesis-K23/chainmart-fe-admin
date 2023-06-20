@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const Products = styled.section`
+export const Orders = styled.section`
   padding: 24px;
   height: 100%;
 `;
 
-export const ProductsHeader = styled.div`
+export const OrdersHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

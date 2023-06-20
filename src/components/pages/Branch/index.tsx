@@ -5,19 +5,14 @@ import { ColumnsType, ColumnType } from "antd/es/table";
 import Highlighter from "react-highlight-words";
 import { FilterConfirmProps } from "antd/es/table/interface";
 
-import {
-  Branch,
-  BranchHeader,
-  Title,
-  MoreButtonGroup,
-  MoreButton,
-} from "./styled";
+import { Branch, BranchHeader, MoreButtonGroup, MoreButton } from "./styled";
 import { useAppDispatch, useAppSelector } from "~/redux";
 import { ASYNC_STATUS } from "~/redux/constants";
 import withAuth from "~/hocs/withAuth";
 import { BranchType, fetchBranch } from "~/redux/branch";
 import MoreBranchModal from "./components/MoreBranchModal";
 import DetailBranchModal from "./components/DetailBranchModal";
+import PageTitle from "~/components/common/PageTitle";
 
 const BranchManagement = () => {
   const dispatch = useAppDispatch();
@@ -172,7 +167,7 @@ const BranchManagement = () => {
   return (
     <Branch>
       <BranchHeader>
-        <Title>Branch Management</Title>
+        <PageTitle text="Branch Management" />
         <div>
           <MoreButtonGroup onClick={() => handleMoreBranch(true)}>
             <AppstoreAddOutlined />
