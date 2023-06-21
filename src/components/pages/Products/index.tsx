@@ -170,6 +170,11 @@ const ProductsManagement = () => {
 
   const columns: ColumnsType<ProductType> = [
     {
+      title: "No.",
+      width: "4%",
+      render: (_, __, i) => <span>{i + 1}</span>,
+    },
+    {
       title: "Image",
       dataIndex: "image",
       key: "images",
@@ -246,7 +251,7 @@ const ProductsManagement = () => {
   return (
     <Products>
       <ProductsHeader>
-        <PageTitle text="Orders Management" />
+        <PageTitle text="Products Management" />
         <div>
           <CategoryButtonGroup onClick={() => handleCategoryDrawer(true)}>
             <ContainerOutlined />

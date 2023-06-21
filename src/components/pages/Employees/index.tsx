@@ -144,7 +144,7 @@ const EmployeesManagement = () => {
   const columns: ColumnsType<EmployeeType> = [
     {
       title: "No.",
-      width: "80px",
+      width: "4%",
       render: (_, __, i) => <span>{i + 1}</span>,
     },
     {

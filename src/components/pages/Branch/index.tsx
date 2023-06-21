@@ -127,7 +127,7 @@ const BranchManagement = () => {
   const columns: ColumnsType<BranchType> = [
     {
       title: "No.",
-      width: "5%",
+      width: "4%",
       render: (_, __, i) => <span>{i + 1}</span>,
     },
     {
@@ -139,14 +139,17 @@ const BranchManagement = () => {
     {
       title: "District",
       dataIndex: "district",
+      width: "10%",
     },
     {
       title: "City",
       dataIndex: "city",
+      width: "10%",
     },
     {
       title: "Ward",
       dataIndex: "ward",
+      width: "10%",
     },
     {
       title: "Address",
@@ -155,6 +158,7 @@ const BranchManagement = () => {
     {
       title: "Phone",
       dataIndex: "phone",
+      width: "10%",
       sorter: (a, b) => (a.phone > b.phone ? 1 : -1),
     },
   ];

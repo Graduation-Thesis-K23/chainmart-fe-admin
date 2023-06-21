@@ -8,6 +8,7 @@ import { productDetailReducer } from "./product-detail";
 import { loginReducer } from "./login";
 import { branchReducer } from "./branch";
 import { employeeReducer } from "./employee";
+import { ordersReducer } from "./orders";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     login: loginReducer,
     branch: branchReducer,
     employee: employeeReducer,
+    orders: ordersReducer,
   },
 });
 

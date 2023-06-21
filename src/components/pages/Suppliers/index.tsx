@@ -132,7 +132,7 @@ const SuppliersManagement = () => {
   const columns: ColumnsType<SupplierType> = [
     {
       title: "No.",
-      width: "5%",
+      width: "4%",
       render: (_, __, i) => <span>{i + 1}</span>,
     },
     {

@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { AppstoreAddOutlined, SearchOutlined } from "@ant-design/icons";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import { Button, Input, InputRef, Space } from "antd";
 import Table, { ColumnType, ColumnsType } from "antd/es/table";
 import Highlighter from "react-highlight-words";
 
-import { ASYNC_STATUS, ProductType, useAppSelector } from "~/redux";
-import getS3Url from "~/utils/get-url-s3";
-import TranslateFunc from "~/utils/dictionary";
+import { ASYNC_STATUS, OrdersType, useAppSelector } from "~/redux";
 import withAuth from "~/hocs/withAuth";
 import { Orders, OrdersHeader, MoreButton, MoreButtonGroup } from "./styled";
 import PageTitle from "~/components/common/PageTitle";
@@ -17,26 +15,12 @@ const OrdersManagement = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
 
-  const productsState = useAppSelector((state) => state.products);
-  // const dispatch = useAppDispatch();
-
-  /*  const handleMoreModal = useCallback((status: boolean) => {
-    setMoreModal(status);
-  }, []);
-
-  const handleClickProduct = useCallback((product: ProductUpdate) => {
-     setViewProduct(product);
-    setDetailModal(true); 
-  }, []);
-
-  const handleCategoryDrawer = useCallback((status: boolean) => {
-    /
-  }, []); */
+  const orders = useAppSelector((state) => state.orders);
 
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
-    dataIndex: keyof ProductType
+    dataIndex: keyof OrdersType
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -49,8 +33,8 @@ const OrdersManagement = () => {
   };
 
   const getColumnSearchProps = (
-    dataIndex: keyof ProductType
-  ): ColumnType<ProductType> => ({
+    dataIndex: keyof OrdersType
+  ): ColumnType<OrdersType> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -139,20 +123,11 @@ const OrdersManagement = () => {
       ),
   });
 
-  const columns: ColumnsType<ProductType> = [
+  const columns: ColumnsType<OrdersType> = [
     {
-      title: "Image",
-      dataIndex: "image",
-      key: "images",
-      width: "80px",
-      render: (_, record) => (
-        <img
-          src={getS3Url(record.images.split(",")[0])}
-          alt="product-image"
-          width={50}
-          height={50}
-        />
-      ),
+      title: "No.",
+      width: "4%",
+      render: (_, __, i) => <span>{i + 1}</span>,
     },
     {
       title: "Name",
@@ -161,58 +136,12 @@ const OrdersManagement = () => {
       width: "30%",
       ...getColumnSearchProps("name"),
     },
-    {
-      title: "Sold",
-      dataIndex: "sold",
-      key: "sold",
-      sorter: (a, b) => a.sold - b.sold,
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      sorter: (a, b) => a.price - b.price,
-    },
-    {
-      title: "Sale",
-      dataIndex: "sale",
-      key: "sale",
-      sorter: (a, b) => a.sale - b.sale,
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating",
-      key: "rating",
-      sorter: (a, b) => a.rating - b.rating,
-    },
-    {
-      title: "Create At",
-      dataIndex: "created_at",
-      sorter: (a, b) => (a.created_at > b.created_at ? 1 : -1),
-      render: (_, { created_at }) => (
-        <span>
-          {new Date(created_at).toLocaleString("en-EN", {
-            timeZone: "Asia/Ho_Chi_Minh",
-          })}
-        </span>
-      ),
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-      sorter: (a, b) => (a.category > b.category ? 1 : -1),
-      render: (_, { category }) => <span>{TranslateFunc(category)}</span>,
-    },
   ];
 
   const handleChangePagination = (page: number, pageSize: number) => {
     console.log(page);
     console.log(pageSize);
   };
-
-  useEffect(() => {
-    // dispatch(fetchOrders());
-  }, []);
 
   return (
     <Orders>
@@ -227,10 +156,10 @@ const OrdersManagement = () => {
       </OrdersHeader>
       <Table
         columns={columns}
-        dataSource={productsState.data}
+        dataSource={orders.data}
         size="small"
         rowKey="id"
-        loading={!(productsState.status == ASYNC_STATUS.SUCCEED)}
+        loading={!(orders.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
           y: "calc(100vh - 203px)",
