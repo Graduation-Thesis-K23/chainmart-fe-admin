@@ -9,6 +9,7 @@ import { loginReducer } from "./login";
 import { branchReducer } from "./branch";
 import { employeeReducer } from "./employee";
 import { ordersReducer } from "./orders";
+import { dashboardReducer } from "./dashboard";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     branch: branchReducer,
     employee: employeeReducer,
     orders: ordersReducer,
+    dashboard: dashboardReducer,
   },
 });
 
