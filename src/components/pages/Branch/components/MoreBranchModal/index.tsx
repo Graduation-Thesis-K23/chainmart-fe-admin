@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from "react";
-import { Col, Modal, Row } from "antd";
+import { Col, Drawer, Row } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   BuildOutlined,
@@ -67,13 +67,12 @@ const MoreBranchModal: FC<{
   }, [setFocus, step]);
 
   return (
-    <Modal
+    <Drawer
       title="More Branch"
       open={moreBranchModal}
-      onOk={() => handleMoreBranch(false)}
-      onCancel={() => handleMoreBranch(false)}
-      centered
-      footer={null}
+      placement="right"
+      size="large"
+      onClose={() => handleMoreBranch(false)}
       width={800}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -176,7 +175,7 @@ const MoreBranchModal: FC<{
           <SubmitButton type="submit" disabled={formState.isSubmitting} />
         </FooterForm>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

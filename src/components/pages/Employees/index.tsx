@@ -22,6 +22,7 @@ import {
 import MoreEmployeeDrawer from "./MoreEmployeeDrawer";
 import PageTitle from "~/components/common/PageTitle";
 import ViewEmployeeDrawer from "./ViewEmployeeDrawer";
+import ReloadButton from "~/components/common/ReloadButton";
 
 const EmployeesManagement = () => {
   const [moreDrawer, setMoreDrawer] = useState(false);
@@ -30,7 +31,7 @@ const EmployeesManagement = () => {
     id: "",
     name: "",
     phone: "",
-    branchId: {
+    branch: {
       id: "",
       name: "",
     },
@@ -156,6 +157,18 @@ const EmployeesManagement = () => {
       title: "Phone",
       dataIndex: "phone",
       width: "250px",
+      ...getColumnSearchProps("phone"),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+    },
+    {
+      title: "Branch",
+      dataIndex: "branch",
+      width: "250px",
+      sorter: (a, b) => a.branch.name.localeCompare(b.branch.name),
+      render: (_, employee) => <span>{employee.branch.name}</span>,
     },
   ];
 
@@ -182,7 +195,6 @@ const EmployeesManagement = () => {
       <Table
         columns={columns}
         dataSource={employee.data}
-        size="small"
         rowKey="id"
         loading={!(employee.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
@@ -198,6 +210,7 @@ const EmployeesManagement = () => {
           onClick: () => handleClickEmployee(record),
         })}
       />
+      {employee.status === ASYNC_STATUS.FAILED && <ReloadButton />}
       <MoreEmployeeDrawer
         employeeDrawer={moreDrawer}
         handleEmployeeDrawer={handleMoreEmployee}

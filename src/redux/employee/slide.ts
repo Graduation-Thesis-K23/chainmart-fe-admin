@@ -3,20 +3,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { BranchType } from "../branch";
+import { ErrorPayload } from "~/shared";
 
 export interface EmployeeType {
   id: string;
   name: string;
   phone: string;
-  branchId: BranchType;
+  branch: BranchType;
 }
 
-export type AddEmployeeType = Omit<EmployeeType, "id" | "branchId"> & {
-  branchId: string;
+export type AddEmployeeType = Omit<EmployeeType, "id" | "branch"> & {
+  branch_id: string;
 };
 
-export type UpdateEmployeeType = Omit<EmployeeType, "branchId"> & {
-  branchId: string;
+export type UpdateEmployeeType = Omit<EmployeeType, "branch"> & {
+  branch_id: string;
 };
 
 export interface EmployeeState {
@@ -34,12 +35,16 @@ export const employeeState = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchEmployee.pending, (state) => {
+      state.status = ASYNC_STATUS.LOADING;
+    });
     builder.addCase(fetchEmployee.fulfilled, (state, { payload }) => {
       state.status = ASYNC_STATUS.SUCCEED;
       state.data = payload;
     });
-    builder.addCase(fetchEmployee.pending, (state) => {
-      state.status = ASYNC_STATUS.LOADING;
+    builder.addCase(fetchEmployee.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+      state.data = [];
     });
     builder.addCase(addEmployee.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
@@ -53,9 +58,6 @@ export const employeeState = createSlice({
     });
     builder.addCase(updateEmployee.fulfilled, (state, { payload }) => {
       state.status = ASYNC_STATUS.SUCCEED;
-
-      console.log(payload);
-
       const i = state.data.findIndex((item) => item.id == payload.id);
       state.data[i] = payload;
     });
@@ -64,23 +66,48 @@ export const employeeState = createSlice({
 
 export const fetchEmployee = createAsyncThunk(
   "employee/getAllEmployee",
-  async (): Promise<EmployeeType[]> =>
-    await instance.get("/api/employee?role=ADMIN")
+  async (_, thunkApi) => {
+    const response: EmployeeType[] | ErrorPayload = await instance.get(
+      "/api/employee?role=ADMIN"
+    );
+
+    if ("message" in response) {
+      return thunkApi.rejectWithValue(response);
+    }
+
+    return thunkApi.fulfillWithValue(response);
+  }
 );
 
 export const addEmployee = createAsyncThunk(
   "employee/addEmployee",
-  async (employee: AddEmployeeType): Promise<EmployeeType> =>
-    await instance.post("/api/employee/create-manager", employee)
+  async (employee: AddEmployeeType, thunkApi) => {
+    const response: EmployeeType | ErrorPayload = await instance.post(
+      "/api/employee/create-manager",
+      employee
+    );
+
+    if ("message" in response) {
+      return thunkApi.rejectWithValue(response.message);
+    }
+
+    return thunkApi.fulfillWithValue(response);
+  }
 );
 
 export const updateEmployee = createAsyncThunk(
   "employee/updateEmployee",
-  async (employee: UpdateEmployeeType): Promise<EmployeeType> => {
-    return await instance.patch(
+  async (employee: UpdateEmployeeType, thunkApi) => {
+    const response: EmployeeType | ErrorPayload = await instance.patch(
       "/api/employee/" + employee.id + "/update-manager",
       employee
     );
+
+    if ("message" in response) {
+      return thunkApi.rejectWithValue(response.message);
+    }
+
+    return thunkApi.fulfillWithValue(response);
   }
 );
 

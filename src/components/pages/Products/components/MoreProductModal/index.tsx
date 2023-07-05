@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from "react";
-import { Modal, Row, Col, Button } from "antd";
+import { Row, Col, Button, Drawer } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form/dist/types";
 
@@ -23,7 +23,8 @@ interface MoreProduct {
   sale: number;
   images: [];
   category: string;
-  supplier: string;
+  supplier_id: string;
+  product_code: string;
   specifications: string;
   description: string;
 }
@@ -48,7 +49,8 @@ const MoreProductModal: FC<{
     sale: 0,
     images: [],
     category: "",
-    supplier: "",
+    supplier_id: "",
+    product_code: "",
     specifications: "",
     description: "",
   };
@@ -81,12 +83,15 @@ const MoreProductModal: FC<{
       bodyFormData.append(key, data[key as keyof MoreProduct] as string);
     }
 
-    await dispatch(addProduct(bodyFormData));
-    toast.success("Add product success!", {
-      autoClose: 1000,
-      hideProgressBar: true,
-    });
-    handleModal(false);
+    const result = await dispatch(addProduct(bodyFormData));
+
+    if (addProduct.fulfilled.match(result)) {
+      toast.success("Add product success!", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+      handleModal(false);
+    }
   };
 
   useEffect(() => {
@@ -94,19 +99,16 @@ const MoreProductModal: FC<{
   }, []);
 
   return (
-    <Modal
+    <Drawer
+      title="Categories List"
+      placement="right"
+      onClose={() => handleModal(false)}
       open={moreModal}
-      title={null}
-      onCancel={() => handleModal(false)}
-      footer={null}
-      style={{
-        top: 20,
-      }}
-      width="100vw"
+      width="1300px"
     >
       <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>
-          <Col span={24}>
+          <Col span={18}>
             <Controller
               name="name"
               control={control}
@@ -117,6 +119,26 @@ const MoreProductModal: FC<{
                   onChange={onChange}
                   value={value}
                   name={name}
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
+          <Col span={6}>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Select
+                  label="Category"
+                  onChange={onChange}
+                  defaultValue={TranslateFunc(categories[0].textKey)}
+                  options={[
+                    ...categories.map((i) => ({
+                      value: i.textKey,
+                      label: TranslateFunc(i.textKey),
+                    })),
+                  ]}
                 />
               )}
               rules={{ required: true }}
@@ -160,7 +182,7 @@ const MoreProductModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="supplier"
+              name="supplier_id"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
@@ -180,19 +202,15 @@ const MoreProductModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="category"
+              name="product_code"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
-                  label="Category"
+              render={({ field: { ref, onChange, value, name } }) => (
+                <Input
+                  label="Product Code"
+                  inputRef={ref}
                   onChange={onChange}
-                  defaultValue={TranslateFunc(categories[0].textKey)}
-                  options={[
-                    ...categories.map((i) => ({
-                      value: i.textKey,
-                      label: TranslateFunc(i.textKey),
-                    })),
-                  ]}
+                  value={value}
+                  name={name}
                 />
               )}
               rules={{ required: true }}
@@ -244,7 +262,7 @@ const MoreProductModal: FC<{
           </Button>
         </SubmitGroup>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

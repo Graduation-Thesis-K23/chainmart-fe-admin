@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react";
-import { Button, Col, Modal, Row } from "antd";
+import { Button, Col, Drawer, Row } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { Input } from "~/components/common";
@@ -44,13 +44,11 @@ const DetailBranchModal: FC<{
   };
 
   return (
-    <Modal
+    <Drawer
+      onClose={() => handleDetailBranch(false)}
       title="Detail Branch"
       open={detailBranchModal}
-      onOk={() => handleDetailBranch(false)}
-      onCancel={() => handleDetailBranch(false)}
-      centered
-      footer={null}
+      size="large"
       width={800}
     >
       <form>
@@ -182,7 +180,7 @@ const DetailBranchModal: FC<{
           </Button>
         </FooterForm>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

@@ -29,12 +29,11 @@ const ViewEmployeeDrawer: FC<{
     defaultValues: {
       name: employee.name,
       phone: employee.phone,
-      branchId: employee.branchId.name,
+      branch_id: employee.branch.name,
     },
   });
 
   const onSubmit: SubmitHandler<AddEmployeeType> = async (data) => {
-    console.log(data);
     dispatch(
       updateEmployee({
         id: employee.id as string,
@@ -99,14 +98,14 @@ const ViewEmployeeDrawer: FC<{
         <Row>
           <Col span={24}>
             <Controller
-              name="branchId"
+              name="branch_id"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
                   label="Branch"
                   onChange={onChange}
                   loading={!true}
-                  defaultValue={employee.branchId.name}
+                  defaultValue={employee.branch.name}
                   options={[
                     ...branch.data.map((i) => ({
                       label: i.name,

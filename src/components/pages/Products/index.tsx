@@ -31,6 +31,7 @@ import getS3Url from "~/utils/get-url-s3";
 import withAuth from "~/hocs/withAuth";
 import TranslateFunc from "~/utils/dictionary";
 import { FilterConfirmProps } from "antd/es/table/interface";
+import ReloadButton from "~/components/common/ReloadButton";
 
 export interface ProductUpdate extends Omit<ProductType, "specifications"> {
   specifications: string;
@@ -181,7 +182,7 @@ const ProductsManagement = () => {
       width: "80px",
       render: (_, record) => (
         <img
-          src={getS3Url(record.images.split(",")[0])}
+          src={getS3Url(record.images[0])}
           alt="product-image"
           width={50}
           height={50}
@@ -196,12 +197,6 @@ const ProductsManagement = () => {
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Sold",
-      dataIndex: "sold",
-      key: "sold",
-      sorter: (a, b) => a.sold - b.sold,
-    },
-    {
       title: "Price",
       dataIndex: "price",
       key: "price",
@@ -212,12 +207,6 @@ const ProductsManagement = () => {
       dataIndex: "sale",
       key: "sale",
       sorter: (a, b) => a.sale - b.sale,
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating",
-      key: "rating",
-      sorter: (a, b) => a.rating - b.rating,
     },
     {
       title: "Create At",
@@ -263,6 +252,7 @@ const ProductsManagement = () => {
           </MoreButtonGroup>
         </div>
       </ProductsHeader>
+
       <Table
         columns={columns}
         dataSource={productsState.data}
@@ -282,6 +272,7 @@ const ProductsManagement = () => {
           onClick: () => handleClickProduct(record),
         })}
       />
+      {productsState.status === ASYNC_STATUS.FAILED && <ReloadButton />}
       {moreModal && (
         <MoreProductModal moreModal={moreModal} setMoreModal={setMoreModal} />
       )}

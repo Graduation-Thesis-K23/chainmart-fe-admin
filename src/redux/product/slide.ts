@@ -3,23 +3,22 @@ import { FieldValues } from "react-hook-form";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
-import { RootState } from "../store";
 import { SupplierType } from "../supplier";
+import { ErrorPayload } from "~/shared";
 
 export interface ProductType {
   id: string;
   name: string;
   price: number;
   sale: number;
-  rating: number;
-  images: string;
+  images: string[];
   created_at: string;
-  supplier: SupplierType;
+  supplier_id: SupplierType;
   category: string;
   slug: string;
   description: string;
-  sold: number;
   specifications: string;
+  product_code: string;
 }
 export interface ProductsState {
   data: ProductType[];
@@ -43,65 +42,86 @@ export const productsSlice = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data = action.payload;
     });
+    builder.addCase(fetchProducts.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+      state.data = [];
+    });
     builder.addCase(addProduct.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
     });
     builder.addCase(addProduct.fulfilled, (state, action) => {
       state.status = ASYNC_STATUS.SUCCEED;
-      state.data.push(action.payload as unknown as ProductType);
+      state.data.push(action.payload);
+    });
+    builder.addCase(addProduct.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+      state.data = [];
     });
     builder.addCase(updateProduct.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
     });
     builder.addCase(updateProduct.fulfilled, (state, action) => {
       state.status = ASYNC_STATUS.SUCCEED;
-      const updated = action.payload as unknown as ProductType;
+      const updated = action.payload;
       const index = state.data.findIndex((item) => item.id === updated.id);
       state.data.splice(index, 1);
       state.data.push(updated);
+    });
+    builder.addCase(updateProduct.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+      state.data = [];
     });
   },
 });
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (): Promise<ProductType[]> => await instance.get("/api/products"),
-  {
-    condition: (_, { getState }) => {
-      const rootState: RootState = getState() as RootState;
+  async (_, thunkApi) => {
+    const products: ProductType[] | ErrorPayload = await instance.get(
+      "/api/products"
+    );
 
-      const productsStateStatus = rootState.products.status;
+    if ("message" in products) {
+      return thunkApi.rejectWithValue(products.message);
+    }
 
-      if (
-        productsStateStatus === ASYNC_STATUS.LOADING ||
-        productsStateStatus === ASYNC_STATUS.SUCCEED
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    },
+    return thunkApi.fulfillWithValue(products);
   }
 );
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (data: object) => {
-    const newProduct = await instance.postForm("/api/products", data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  async (data: object, thunkApi) => {
+    const newProduct: ProductType | ErrorPayload = await instance.postForm(
+      "/api/products",
+      data,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
 
-    console.log(newProduct);
+    if ("message" in newProduct) {
+      return thunkApi.rejectWithValue(newProduct.message);
+    }
 
-    return newProduct;
+    return thunkApi.fulfillWithValue(newProduct);
   }
 );
 
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async (data: FieldValues) => {
+  async (data: FieldValues, thunkApi) => {
     const { id, ...newData } = data;
 
-    return await instance.patch("/api/products/" + id, newData);
+    const response: ProductType | ErrorPayload = await instance.patch(
+      "/api/products/" + id,
+      newData
+    );
+
+    if ("message" in response) {
+      return thunkApi.rejectWithValue(response.message);
+    }
+
+    return thunkApi.fulfillWithValue(response);
   }
 );
 

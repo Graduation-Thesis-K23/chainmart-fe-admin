@@ -127,7 +127,7 @@ const BranchManagement = () => {
   const columns: ColumnsType<BranchType> = [
     {
       title: "No.",
-      width: "4%",
+      width: "65px",
       render: (_, __, i) => <span>{i + 1}</span>,
     },
     {

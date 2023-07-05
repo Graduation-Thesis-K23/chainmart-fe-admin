@@ -27,7 +27,7 @@ const MoreEmployeeDrawer: FC<{
     defaultValues: {
       name: "",
       phone: "",
-      branchId: "",
+      branch_id: "",
     },
   });
 
@@ -91,7 +91,7 @@ const MoreEmployeeDrawer: FC<{
         <Row>
           <Col span={24}>
             <Controller
-              name="branchId"
+              name="branch_id"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select

@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react";
-import { Col, Modal, Row } from "antd";
+import { Col, Drawer, Row } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -43,14 +43,12 @@ const MoreSupplierModal: FC<{
   };
 
   return (
-    <Modal
+    <Drawer
       title="More Supplier"
+      placement="right"
       open={moreSupplierModal}
-      onOk={() => handleMoreSupplier(false)}
-      onCancel={() => handleMoreSupplier(false)}
-      centered
-      footer={null}
-      width={800}
+      size="large"
+      onClose={() => handleMoreSupplier(false)}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={24}>
@@ -182,7 +180,7 @@ const MoreSupplierModal: FC<{
           <SubmitButton type="submit" disabled={formState.isSubmitting} />
         </FooterForm>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

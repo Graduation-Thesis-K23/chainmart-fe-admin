@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { Button, Col, Modal, Row } from "antd";
+import { Button, Col, Drawer, Row } from "antd";
 import {
   Controller,
   FieldValues,
@@ -67,24 +67,23 @@ const DetailModal: FC<{
     }
   };
 
+  console.log(product);
+
   useEffect(() => {
     dispatch(fetchSuppliers());
   }, []);
 
   return (
-    <Modal
+    <Drawer
       title="Product Detail"
+      placement="right"
+      onClose={() => handleModal(false)}
       open={detailModal}
-      onCancel={() => handleModal(false)}
-      footer={null}
-      style={{
-        top: 20,
-      }}
-      width="100vw"
+      width="1200px"
     >
       <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>
-          <Col span={24}>
+          <Col span={18}>
             <Controller
               name="name"
               control={control}
@@ -95,6 +94,26 @@ const DetailModal: FC<{
                   onChange={onChange}
                   value={value}
                   name={name}
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
+          <Col span={6}>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Select
+                  label="Category"
+                  onChange={onChange}
+                  defaultValue={product.category}
+                  options={[
+                    ...categories.map((i) => ({
+                      value: i.textKey,
+                      label: TranslateFunc(i.textKey),
+                    })),
+                  ]}
                 />
               )}
               rules={{ required: true }}
@@ -136,19 +155,19 @@ const DetailModal: FC<{
               rules={{ required: true }}
             />
           </Col>
+
           <Col span={6}>
             <Controller
-              name="category"
+              name="supplier_id"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
-                  label="Category"
+                  label="Supplier"
                   onChange={onChange}
-                  defaultValue={product.category}
                   options={[
-                    ...categories.map((i) => ({
-                      value: i.textKey,
-                      label: TranslateFunc(i.textKey),
+                    ...suppliers.data.map((i) => ({
+                      value: i.id,
+                      label: i.name,
                     })),
                   ]}
                 />
@@ -158,19 +177,13 @@ const DetailModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="supplier"
+              name="supplier_id"
               control={control}
               render={({ field: { onChange } }) => (
-                <Select
-                  label="Supplier"
+                <Input
+                  label="Price"
                   onChange={onChange}
-                  defaultValue={product.supplier.name}
-                  options={[
-                    ...suppliers.data.map((i) => ({
-                      value: i.id,
-                      label: i.name,
-                    })),
-                  ]}
+                  value={product.product_code}
                 />
               )}
               rules={{ required: true }}
@@ -216,7 +229,7 @@ const DetailModal: FC<{
           </Button>
         </SubmitGroup>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

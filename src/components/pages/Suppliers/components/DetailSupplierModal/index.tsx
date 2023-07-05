@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react";
-import { Button, Col, Modal, Row } from "antd";
+import { Button, Col, Drawer, Row } from "antd";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -45,14 +45,12 @@ const DetailSupplierModal: FC<{
   };
 
   return (
-    <Modal
+    <Drawer
       title="Detail Supplier"
       open={detailSupplierModal}
-      onOk={() => handleDetailSupplier(false)}
-      onCancel={() => handleDetailSupplier(false)}
-      centered
-      footer={null}
-      width={800}
+      placement="right"
+      onClose={() => handleDetailSupplier(false)}
+      size="large"
     >
       <form>
         <Row gutter={24}>
@@ -204,7 +202,7 @@ const DetailSupplierModal: FC<{
           </Button>
         </FooterForm>
       </form>
-    </Modal>
+    </Drawer>
   );
 };
 

@@ -12,56 +12,9 @@ import {
   Branch,
 } from "~/components/pages";
 import MainLayout from "~/components/layouts/MainLayout";
+import ErrorBoundary from "~/components/pages/ErrorBoundary";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <MainLayout>
-        <Dashboard />
-      </MainLayout>
-    ),
-  },
-  {
-    path: "/products",
-    element: (
-      <MainLayout>
-        <Products />
-      </MainLayout>
-    ),
-  },
-  {
-    path: "/employees",
-    element: (
-      <MainLayout>
-        <Employees />
-      </MainLayout>
-    ),
-  },
-  {
-    path: "/orders",
-    element: (
-      <MainLayout>
-        <Orders />
-      </MainLayout>
-    ),
-  },
-  {
-    path: "/branch",
-    element: (
-      <MainLayout>
-        <Branch />
-      </MainLayout>
-    ),
-  },
-  {
-    path: "/suppliers",
-    element: (
-      <MainLayout>
-        <Suppliers />
-      </MainLayout>
-    ),
-  },
+const baseRouter = [
   {
     path: "/login",
     element: <Login />,
@@ -70,6 +23,56 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFound />,
   },
-]);
+];
 
-export default router;
+const routerList = [
+  {
+    path: "/",
+    element: <Dashboard />,
+  },
+  {
+    path: "/products",
+    element: <Products />,
+  },
+  {
+    path: "/employees",
+    element: <Employees />,
+  },
+  {
+    path: "/orders",
+    element: <Orders />,
+  },
+  {
+    path: "/branch",
+    element: <Branch />,
+  },
+  {
+    path: "/suppliers",
+    element: <Suppliers />,
+  },
+];
+
+const devRouter = routerList.map((router) => {
+  return {
+    ...router,
+    element: <MainLayout>{router.element}</MainLayout>,
+  };
+});
+
+const prodRouter = routerList.map((router) => {
+  return {
+    ...router,
+    element: (
+      <ErrorBoundary>
+        <MainLayout>{router.element}</MainLayout>
+      </ErrorBoundary>
+    ),
+  };
+});
+
+const routers =
+  process.env.NODE_ENV === "development"
+    ? [...baseRouter, ...devRouter]
+    : [...baseRouter, ...prodRouter];
+
+export default createBrowserRouter(routers);
