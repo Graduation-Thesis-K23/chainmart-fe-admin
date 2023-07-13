@@ -80,8 +80,7 @@
   "lint-staged": {
     "**/*": "npx prettier --write --ignore-unknown",
     "*.{js,jsx,ts,tsx}": [
-      "npx eslint --fix",
-      "git add"
+      "npx eslint --fix"
     ]
   },
   "engines": {
