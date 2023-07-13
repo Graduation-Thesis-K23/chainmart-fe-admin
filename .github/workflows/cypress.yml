@@ -1,0 +1,71 @@
+name: Cypress Tests
+
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Cypress run
+        id: cypress-run
+        uses: cypress-io/github-action@v5
+        with:
+          build: npm run build
+          start: npm run start
+          browser: chrome
+          wait-on: "http://localhost:8080"
+          wait-on-timeout: 120
+        continue-on-error: true
+
+      - name: Upload Cypress videos
+        if: steps.cypress-run.outcome == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: cypress/videos
+    outputs:
+      cypress-run: ${{ steps.cypress-run.outcome }}
+
+  telegram-notify:
+    runs-on: ubuntu-22.04
+    needs: cypress-run
+    steps:
+      - name: Send mesage to Telegram
+        if: needs.cypress-run.outputs.cypress-run == 'failure'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            *Cypress tests failed!*
+            *Branch:* ${{ github.ref }}
+            *Workflow:* ${{ github.workflow }}
+            *Run number:* ${{ github.run_number }}
+            *Run id:* ${{ github.run_id }}
+            *Commit message:* ${{ github.event.head_commit.message }}
+            *Commit url:* ${{ github.event.head_commit.url }}
+            *Commit author:* ${{ github.event.head_commit.author.name }}
+
+      - name: Send mesage to Telegram
+        if: needs.cypress-run.outputs.cypress-run == 'success'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            *Cypress tests passed!*
+            *Branch:* ${{ github.ref }}
+            *Workflow:* ${{ github.workflow }}
+            *Run number:* ${{ github.run_number }}
+            *Run id:* ${{ github.run_id }}
+            *Commit message:* ${{ github.event.head_commit.message }}
+            *Commit url:* ${{ github.event.head_commit.url }}
+            *Commit author:* ${{ github.event.head_commit.author.name }}
