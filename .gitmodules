@@ -1,6 +1,6 @@
 [submodule "src/shared"]
 	path = src/shared
-	url = git@github.com:Graduation-Thesis-K23/shared.git
+	url = https://github.com/Graduation-Thesis-K23/shared.git
 [submodule "src/sub-categories"]
 	path = src/sub-categories
-	url = git@github.com:Graduation-Thesis-K23/categories.git
+	url = https://github.com/Graduation-Thesis-K23/categories.git
