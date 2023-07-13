@@ -77,12 +77,6 @@
       "last 1 safari version"
     ]
   },
-  "lint-staged": {
-    "**/*": "npx prettier --write --ignore-unknown",
-    "*.{js,jsx,ts,tsx}": [
-      "npx eslint --fix"
-    ]
-  },
   "engines": {
     "node": ">=18.0.0"
   },
