@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  chainmart-fe-customer:
+  chainmart-fe-admin:
     image: 376597958889.dkr.ecr.ap-southeast-1.amazonaws.com/chainmart-fe-admin:latest
     ports:
       - "6001:3000"
