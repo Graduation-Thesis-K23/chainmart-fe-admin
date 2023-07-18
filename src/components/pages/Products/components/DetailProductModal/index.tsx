@@ -67,8 +67,6 @@ const DetailModal: FC<{
     }
   };
 
-  console.log(product);
-
   useEffect(() => {
     dispatch(fetchSuppliers());
   }, []);

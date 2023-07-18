@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
 import { SupplierType } from "../supplier";
-import { ErrorPayload } from "~/shared";
+import { ErrorPayload, PaginationMetadata, PaginationResult } from "~/shared";
 
 export interface ProductType {
   id: string;
@@ -20,14 +20,17 @@ export interface ProductType {
   specifications: string;
   product_code: string;
 }
+
 export interface ProductsState {
   data: ProductType[];
   status: typeof ASYNC_STATUS[keyof typeof ASYNC_STATUS];
+  metadata: PaginationMetadata;
 }
 
 const initialState: ProductsState = {
   data: [],
   status: ASYNC_STATUS.IDLE,
+  metadata: {} as PaginationMetadata,
 };
 
 export const productsSlice = createSlice({
@@ -40,7 +43,14 @@ export const productsSlice = createSlice({
     });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
       state.status = ASYNC_STATUS.SUCCEED;
-      state.data = action.payload;
+      const { docs, totalDocs, limit, totalPages, page } = action.payload;
+      state.data = docs;
+      state.metadata = {
+        totalDocs,
+        limit,
+        totalPages,
+        page,
+      };
     });
     builder.addCase(fetchProducts.rejected, (state) => {
       state.status = ASYNC_STATUS.FAILED;
@@ -77,15 +87,14 @@ export const productsSlice = createSlice({
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, thunkApi) => {
-    const products: ProductType[] | ErrorPayload = await instance.get(
-      "/api/products"
-    );
+    const result: PaginationResult<ProductType> | ErrorPayload =
+      await instance.get("/api/products");
 
-    if ("message" in products) {
-      return thunkApi.rejectWithValue(products.message);
+    if ("message" in result) {
+      return thunkApi.rejectWithValue(result.message);
     }
 
-    return thunkApi.fulfillWithValue(products);
+    return thunkApi.fulfillWithValue(result);
   }
 );
 export const addProduct = createAsyncThunk(
@@ -98,6 +107,8 @@ export const addProduct = createAsyncThunk(
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
+
+    console.log(newProduct);
 
     if ("message" in newProduct) {
       return thunkApi.rejectWithValue(newProduct.message);

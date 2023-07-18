@@ -1,7 +1,7 @@
 import React, { useEffect, FC } from "react";
 import { Row, Col, Button, Drawer } from "antd";
 import { useForm, Controller } from "react-hook-form";
-import { SubmitHandler } from "react-hook-form/dist/types";
+import { SubmitHandler } from "react-hook-form";
 
 import { Input, Select } from "~/components/common";
 
@@ -12,7 +12,6 @@ import Description from "./components/Description";
 import { addProduct, useAppDispatch, useAppSelector } from "~/redux";
 import { SubmitGroup } from "./styled";
 import { ASYNC_STATUS, fetchSuppliers } from "~/redux";
-import Log from "~/utils/Log";
 import categories from "~/sub-categories/categories";
 import TranslateFunc from "~/utils/dictionary";
 import { toast } from "react-toastify";
@@ -33,8 +32,6 @@ const MoreProductModal: FC<{
   moreModal: boolean;
   setMoreModal: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ moreModal, setMoreModal }) => {
-  Log("MoreProductModal");
-
   const handleModal = (status: boolean) => {
     setMoreModal(status);
   };
@@ -55,11 +52,7 @@ const MoreProductModal: FC<{
     description: "",
   };
 
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues,
   });
 
@@ -91,6 +84,13 @@ const MoreProductModal: FC<{
         hideProgressBar: true,
       });
       handleModal(false);
+    } else {
+      const message = result.payload as string;
+
+      toast.error("Add product failed!" + message[0], {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
     }
   };
 
@@ -254,9 +254,9 @@ const MoreProductModal: FC<{
         <Row gutter={[24, 24]}></Row>
         <SubmitGroup>
           <Button
-            disabled={isSubmitting}
             onClick={handleSubmit(onSubmit)}
             loading={!(products.status === ASYNC_STATUS.SUCCEED)}
+            type="primary"
           >
             Save
           </Button>
