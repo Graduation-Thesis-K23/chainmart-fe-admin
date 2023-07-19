@@ -86,9 +86,9 @@ export const productsSlice = createSlice({
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (_, thunkApi) => {
+  async (page: number, thunkApi) => {
     const result: PaginationResult<ProductType> | ErrorPayload =
-      await instance.get("/api/products");
+      await instance.get("/api/products?page=" + page + "&limit=10");
 
     if ("message" in result) {
       return thunkApi.rejectWithValue(result.message);

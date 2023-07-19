@@ -34,16 +34,22 @@ const ViewEmployeeDrawer: FC<{
   });
 
   const onSubmit: SubmitHandler<AddEmployeeType> = async (data) => {
-    dispatch(
+    const result = await dispatch(
       updateEmployee({
         id: employee.id as string,
         ...data,
       })
     );
 
-    handleViewEmployeeDrawer(false);
+    if (updateEmployee.fulfilled.match(result)) {
+      toast.success("Employee updated successfully");
+    }
 
-    toast.success("Employee update successfully");
+    if (updateEmployee.rejected.match(result)) {
+      toast.error(result.payload as string);
+    }
+
+    handleViewEmployeeDrawer(false);
   };
 
   useEffect(() => {

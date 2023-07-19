@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
+import { ErrorPayload } from "~/shared";
 
 export interface BranchType {
   id: string;
@@ -45,6 +46,9 @@ export const branchState = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data.push(payload);
     });
+    builder.addCase(addBranch.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+    });
     builder.addCase(updateBranch.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
     });
@@ -54,25 +58,56 @@ export const branchState = createSlice({
       const i = state.data.findIndex((item) => item.id == payload.id);
       state.data[i] = payload;
     });
+    builder.addCase(updateBranch.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+    });
   },
 });
 
 export const fetchBranch = createAsyncThunk(
   "branch/getAllBranch",
-  async (): Promise<BranchType[]> => await instance.get("/api/branch")
+  async (_, thunkApi) => {
+    const result: BranchType[] | ErrorPayload = await instance.get(
+      "/api/branch"
+    );
+
+    if ("message" in result) {
+      return thunkApi.rejectWithValue(result.message);
+    }
+
+    return thunkApi.fulfillWithValue(result);
+  }
 );
 
 export const addBranch = createAsyncThunk(
   "branch/addBranch",
-  async (branch: AddBranchType): Promise<BranchType> => {
-    return await instance.post("/api/branch", branch);
+  async (branch: AddBranchType, thunkApi) => {
+    const result: BranchType | ErrorPayload = await instance.post(
+      "/api/branch",
+      branch
+    );
+
+    if ("message" in result) {
+      return thunkApi.rejectWithValue(result.message);
+    }
+
+    return thunkApi.fulfillWithValue(result);
   }
 );
 
 export const updateBranch = createAsyncThunk(
   "branch/updateBranch",
-  async (branch: BranchType): Promise<BranchType> => {
-    return await instance.patch("/api/branch/" + branch.id, branch);
+  async (branch: BranchType, thunkApi) => {
+    const result: BranchType | ErrorPayload = await instance.patch(
+      "/api/branch/" + branch.id,
+      branch
+    );
+
+    if ("message" in result) {
+      return thunkApi.rejectWithValue(result.message);
+    }
+
+    return thunkApi.fulfillWithValue(result);
   }
 );
 

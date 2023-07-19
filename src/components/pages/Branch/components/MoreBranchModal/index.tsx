@@ -46,14 +46,17 @@ const MoreBranchModal: FC<{
   });
 
   const onSubmit: SubmitHandler<AddBranchType> = async (data) => {
-    await dispatch(addBranch(data));
+    const result = await dispatch(addBranch(data));
 
-    handleMoreBranch(false);
+    if (addBranch.fulfilled.match(result)) {
+      toast.success("Add branch successfully");
+      handleMoreBranch(false);
+    }
 
-    toast.success("Add branch success!", {
-      autoClose: 1000,
-      hideProgressBar: true,
-    });
+    if (addBranch.rejected.match(result)) {
+      toast.error(result.payload as string);
+      handleMoreBranch(false);
+    }
   };
 
   useEffect(() => {

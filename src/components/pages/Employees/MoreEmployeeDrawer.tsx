@@ -32,11 +32,16 @@ const MoreEmployeeDrawer: FC<{
   });
 
   const onSubmit: SubmitHandler<AddEmployeeType> = async (data) => {
-    dispatch(addEmployee(data));
+    const result = await dispatch(addEmployee(data));
 
-    handleEmployeeDrawer(false);
+    if (addEmployee.fulfilled.match(result)) {
+      handleEmployeeDrawer(false);
+      toast.success("Employee added successfully");
+    }
 
-    toast.success("Employee added successfully");
+    if (addEmployee.rejected.match(result)) {
+      toast.error(result.payload as string);
+    }
   };
 
   useEffect(() => {

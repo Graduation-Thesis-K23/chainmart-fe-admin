@@ -53,6 +53,9 @@ export const employeeState = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       state.data.push(payload);
     });
+    builder.addCase(addEmployee.rejected, (state) => {
+      state.status = ASYNC_STATUS.FAILED;
+    });
     builder.addCase(updateEmployee.pending, (state) => {
       state.status = ASYNC_STATUS.LOADING;
     });

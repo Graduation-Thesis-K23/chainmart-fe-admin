@@ -42,6 +42,7 @@ const ProductsManagement = () => {
   const [detailModal, setDetailModal] = useState(false);
   const [viewProduct, setViewProduct] = useState({} as ProductUpdate);
   const [categoryDrawer, setCategoryDrawer] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -228,13 +229,13 @@ const ProductsManagement = () => {
     },
   ];
 
-  const handleChangePagination = (page: number, pageSize: number) => {
-    console.log(page);
-    console.log(pageSize);
+  const handleChangePagination = (page: number) => {
+    setPage(page);
+    dispatch(fetchProducts(page));
   };
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProducts(page));
   }, []);
 
   return (
@@ -264,9 +265,11 @@ const ProductsManagement = () => {
           y: "calc(100vh - 203px)",
         }}
         pagination={{
-          defaultCurrent: 1,
-          position: ["bottomCenter"],
-          onChange: (page, pageSize) => handleChangePagination(page, pageSize),
+          defaultCurrent: page,
+          position: ["topCenter"],
+          pageSize: 10,
+          onChange: (page) => handleChangePagination(page),
+          total: productsState.metadata.totalDocs,
         }}
         onRow={(record) => ({
           onClick: () => handleClickProduct(record),

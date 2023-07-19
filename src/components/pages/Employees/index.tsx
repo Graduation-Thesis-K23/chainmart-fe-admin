@@ -203,7 +203,8 @@ const EmployeesManagement = () => {
         }}
         pagination={{
           defaultCurrent: 1,
-          position: ["bottomCenter"],
+          position: ["topCenter"],
+          pageSize: 12,
           onChange: (page, pageSize) => handleChangePagination(page, pageSize),
         }}
         onRow={(record) => ({
