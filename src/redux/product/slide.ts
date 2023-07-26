@@ -108,8 +108,6 @@ export const addProduct = createAsyncThunk(
       }
     );
 
-    console.log(newProduct);
-
     if ("message" in newProduct) {
       return thunkApi.rejectWithValue(newProduct.message);
     }
