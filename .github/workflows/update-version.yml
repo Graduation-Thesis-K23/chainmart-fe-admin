@@ -72,8 +72,8 @@ jobs:
           ECR_REPOSITORY: chainmart-fe-admin
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION $ECR_REGISTRY/$ECR_REPOSITORY:lastest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:lastest
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
         continue-on-error: true
     outputs:
