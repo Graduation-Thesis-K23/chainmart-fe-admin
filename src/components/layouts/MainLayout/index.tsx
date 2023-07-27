@@ -5,7 +5,6 @@ import {
   ShopOutlined,
   AreaChartOutlined,
   UsergroupAddOutlined,
-  CodepenOutlined,
   ApartmentOutlined,
   AuditOutlined,
 } from "@ant-design/icons";
@@ -45,11 +44,11 @@ const items: MenuProps["items"] = [
     icon: <UsergroupAddOutlined />,
     label: <Link to="/employees">Employees Management</Link>,
   },
-  {
+  /*  {
     key: PAGES.ORDERS,
     icon: <CodepenOutlined />,
     label: <Link to="/orders">Orders Management</Link>,
-  },
+  }, */
   {
     key: PAGES.BRANCH,
     icon: <ApartmentOutlined />,

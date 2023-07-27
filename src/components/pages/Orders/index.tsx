@@ -3,7 +3,6 @@ import Table, { ColumnsType } from "antd/es/table";
 
 import {
   ASYNC_STATUS,
-  OrdersRender,
   fetchOrders,
   useAppDispatch,
   useAppSelector,
@@ -14,7 +13,7 @@ import PageTitle from "~/components/common/PageTitle";
 import ReloadButton from "~/components/common/ReloadButton";
 import convertPrice from "~/utils/convert-price";
 import ViewOrder from "./ViewOrder";
-import { OrderStatus, Payment } from "~/shared";
+import { OrderStatus, OrdersRender, Payment } from "~/shared";
 
 interface ProductProps {
   name: string;

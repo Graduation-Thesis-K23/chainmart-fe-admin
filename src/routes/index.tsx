@@ -6,7 +6,6 @@ import {
   Products,
   Login,
   Employees,
-  Orders,
   Suppliers,
   NotFound,
   Branch,
@@ -38,10 +37,10 @@ const routerList = [
     path: "/employees",
     element: <Employees />,
   },
-  {
+  /* {
     path: "/orders",
     element: <Orders />,
-  },
+  }, */
   {
     path: "/branch",
     element: <Branch />,

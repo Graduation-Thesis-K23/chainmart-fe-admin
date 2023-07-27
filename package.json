@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "start": "serve -s build -p 8080",
-    "dev": "craco start",
-    "build": "craco build",
+    "dev": "env-cmd -f .env.dev craco start",
+    "build": "env-cmd -f .env craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
@@ -21,6 +21,7 @@
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "draft-js-import-html": "^1.4.1",
+    "env-cmd": "^10.1.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -2,31 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
-import { ErrorPayload, OrderStatus } from "~/shared";
-
-export interface OrdersType {
-  id: string;
-  name: string;
-  phone: string;
-  branchId: string;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  username: string;
-}
-
-export interface OrdersRender extends OrdersType {
-  created_at: Date;
-  user: User;
-  estimated_shipped_date: Date;
-  status: OrderStatus;
-  total: number;
-  payment: string;
-}
+import { ErrorPayload, OrdersRender } from "~/shared";
 
 export interface OrdersState {
   data: OrdersRender[];
