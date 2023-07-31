@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 
 import { Select, Input } from "~/components/common";
 
-import Description from "./components/Description";
 import Specifications, {
   SpecificationsType,
 } from "./components/Specifications";
@@ -46,6 +45,7 @@ const DetailModal: FC<{
     defaultValues: {
       ...product,
       sale: product.sale ? product.sale : 0,
+      acceptable_expiry_threshold: product.acceptable_expiry_threshold,
     },
   });
 
@@ -59,8 +59,13 @@ const DetailModal: FC<{
         }
       }
 
-      dispatch(updateProduct(newData));
-      toast.success("Product updated");
+      const result = await dispatch(updateProduct(newData));
+
+      if (updateProduct.fulfilled.match(result)) {
+        toast.success("Product updated");
+      } else {
+        toast.error("Product not update");
+      }
       handleModal(false);
     } else {
       toast.error("Product not update");
@@ -81,13 +86,29 @@ const DetailModal: FC<{
     >
       <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>
-          <Col span={18}>
+          <Col span={12}>
             <Controller
               name="name"
               control={control}
               render={({ field: { ref, onChange, value, name } }) => (
                 <Input
                   label="Name"
+                  inputRef={ref}
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
+          <Col span={6}>
+            <Controller
+              name="acceptable_expiry_threshold"
+              control={control}
+              render={({ field: { ref, onChange, value, name } }) => (
+                <Input
+                  label="Acceptable Expiry Threshold"
                   inputRef={ref}
                   onChange={onChange}
                   value={value}
@@ -162,6 +183,7 @@ const DetailModal: FC<{
                 <Select
                   label="Supplier"
                   onChange={onChange}
+                  defaultValue={product.supplier_id}
                   options={[
                     ...suppliers.data.map((i) => ({
                       value: i.id,
@@ -175,11 +197,11 @@ const DetailModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="supplier_id"
+              name="product_code"
               control={control}
               render={({ field: { onChange } }) => (
                 <Input
-                  label="Price"
+                  label="Product Code"
                   onChange={onChange}
                   value={product.product_code}
                 />
@@ -188,9 +210,8 @@ const DetailModal: FC<{
             />
           </Col>
         </Row>
-
         <Row gutter={[24, 24]}>
-          <Col span={12}>
+          <Col span={24}>
             <Controller
               name="specifications"
               control={control}
@@ -205,24 +226,14 @@ const DetailModal: FC<{
               rules={{ required: true }}
             />
           </Col>
-          <Col span={12}>
-            <Col span={24}>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field: { onChange } }) => (
-                  <Description
-                    onChange={onChange}
-                    defaultValue={product.description}
-                  />
-                )}
-                rules={{ required: true }}
-              />
-            </Col>
-          </Col>
         </Row>
         <SubmitGroup>
-          <Button disabled={isSubmitting} onClick={handleSubmit(onSubmit)}>
+          <Button
+            type="primary"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            onClick={handleSubmit(onSubmit)}
+          >
             Save
           </Button>
         </SubmitGroup>

@@ -3,7 +3,6 @@ import { FieldValues } from "react-hook-form";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
-import { SupplierType } from "../supplier";
 import { ErrorPayload, PaginationMetadata, PaginationResult } from "~/shared";
 
 export interface ProductType {
@@ -13,12 +12,13 @@ export interface ProductType {
   sale: number;
   images: string[];
   created_at: string;
-  supplier_id: SupplierType;
+  supplier_id: string;
   category: string;
   slug: string;
   description: string;
   specifications: string;
   product_code: string;
+  acceptable_expiry_threshold: number;
 }
 
 export interface ProductsState {
@@ -74,8 +74,7 @@ export const productsSlice = createSlice({
       state.status = ASYNC_STATUS.SUCCEED;
       const updated = action.payload;
       const index = state.data.findIndex((item) => item.id === updated.id);
-      state.data.splice(index, 1);
-      state.data.push(updated);
+      state.data[index] = updated;
     });
     builder.addCase(updateProduct.rejected, (state) => {
       state.status = ASYNC_STATUS.FAILED;

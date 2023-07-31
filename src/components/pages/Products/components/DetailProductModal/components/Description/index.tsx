@@ -1,9 +1,5 @@
-import React, { FC, useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { FC } from "react";
 import styled from "styled-components";
-
-/* Use another library for create HTML so ReactQuill not supported some function */
 
 const DescriptionLabel = styled.p`
   display: inline-block;
@@ -16,25 +12,33 @@ const DescriptionLabel = styled.p`
 const Description: FC<{
   onChange: (...event: unknown[]) => void;
   defaultValue?: string;
-}> = ({ onChange, defaultValue = "" }) => {
-  const [value, setValue] = useState(defaultValue);
+}> = () => {
+  /* const [value, setValue] = useState(
+    EditorState.createWithContent(stateFromHTML(defaultValue))
+  );
 
-  const handleChangeValue = (data: string) => {
+  const handleChangeValue = (data: EditorState) => {
     setValue(data);
-    onChange(value);
+    onChange(stateToHTML(data.getCurrentContent()));
   };
-
+ */
   return (
     <div>
       <DescriptionLabel>Description</DescriptionLabel>
-      <ReactQuill
+      <div
         style={{
-          height: 300,
+          backgroundColor: "#eee",
+          minHeight: 342,
+          padding: 6,
         }}
-        theme="snow"
-        value={value}
-        onChange={handleChangeValue}
-      />
+      >
+        {/*  <Toolbar />
+        <Editor
+          editorState={value}
+          onChange={handleChangeValue}
+          plugins={plugins}
+        /> */}
+      </div>
     </div>
   );
 };

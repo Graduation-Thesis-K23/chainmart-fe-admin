@@ -26,6 +26,7 @@ interface MoreProduct {
   product_code: string;
   specifications: string;
   description: string;
+  acceptable_expiry_threshold: number;
 }
 
 const MoreProductModal: FC<{
@@ -50,6 +51,7 @@ const MoreProductModal: FC<{
     product_code: "",
     specifications: "",
     description: "",
+    acceptable_expiry_threshold: 30,
   };
 
   const { control, handleSubmit } = useForm({
@@ -108,7 +110,7 @@ const MoreProductModal: FC<{
     >
       <form encType="multipart/form-data">
         <Row gutter={[24, 24]}>
-          <Col span={18}>
+          <Col span={12}>
             <Controller
               name="name"
               control={control}
@@ -126,13 +128,29 @@ const MoreProductModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
+              name="acceptable_expiry_threshold"
+              control={control}
+              render={({ field: { ref, onChange, value, name } }) => (
+                <Input
+                  label="Acceptable Expiry Threshold"
+                  inputRef={ref}
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  type="number"
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
+          <Col span={6}>
+            <Controller
               name="category"
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
                   label="Category"
                   onChange={onChange}
-                  defaultValue={TranslateFunc(categories[0].textKey)}
                   options={[
                     ...categories.map((i) => ({
                       value: i.textKey,
@@ -255,7 +273,7 @@ const MoreProductModal: FC<{
         <SubmitGroup>
           <Button
             onClick={handleSubmit(onSubmit)}
-            loading={!(products.status === ASYNC_STATUS.SUCCEED)}
+            loading={products.status === ASYNC_STATUS.LOADING}
             type="primary"
           >
             Save
