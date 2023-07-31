@@ -126,9 +126,10 @@ const ViewEmployeeDrawer: FC<{
         </Row>
       </form>
       <Button
+        type="primary"
         disabled={isSubmitting || !isDirty}
         onClick={handleSubmit(onSubmit)}
-        loading={!(branch.status === ASYNC_STATUS.SUCCEED)}
+        loading={branch.status === ASYNC_STATUS.LOADING}
       >
         Save
       </Button>
