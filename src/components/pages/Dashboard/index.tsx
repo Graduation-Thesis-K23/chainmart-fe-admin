@@ -25,19 +25,19 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "~/redux";
-import { DashboardPayload, getDataDashboard } from "~/redux/dashboard/slide";
+import { DashboardPayload, getDataDashboard } from "~/redux";
 
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import ReloadButton from "~/components/common/ReloadButton";
 import { DashboardType } from "~/shared";
 dayjs().format();
 
 const DashboardSc: FC = () => {
-  const [startDate, setStartDate] = React.useState<string>(
-    dayjs().subtract(30, "days").toString()
+  const [startDate, setStartDate] = React.useState<Dayjs>(
+    dayjs().subtract(30, "days")
   );
-  const [endDate, setEndDate] = React.useState<string>(
-    dayjs().subtract(1, "days").toString()
+  const [endDate, setEndDate] = React.useState<Dayjs>(
+    dayjs().subtract(1, "days")
   );
   const [branch, setBranch] = React.useState<string>("all");
   const [dashboardType, setDashboardType] = React.useState<DashboardType>(
@@ -97,9 +97,11 @@ const DashboardSc: FC = () => {
               return current && current > moment(customDate, "YYYY-MM-DD");
             }}
             format={"DD/MM/YYYY"}
-            onChange={(_, dateStrings) => {
-              setStartDate(dateStrings[0]);
-              setEndDate(dateStrings[1]);
+            onChange={(value) => {
+              const [startDate, endDate] = value as [Dayjs, Dayjs];
+
+              setStartDate(startDate);
+              setEndDate(endDate);
             }}
             defaultPickerValue={[
               dayjs().subtract(30, "days"),
@@ -168,7 +170,7 @@ const DashboardSc: FC = () => {
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="label" />
               <YAxis />
               <Tooltip />
               <Legend />
@@ -177,7 +179,7 @@ const DashboardSc: FC = () => {
           ) : (
             <BarChart width={1400} height={700} data={data}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="label" />
               <YAxis />
               <Tooltip />
               <Legend />

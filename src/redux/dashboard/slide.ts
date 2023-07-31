@@ -3,10 +3,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ASYNC_STATUS } from "../constants";
 import { DashboardColumn, DashboardType, ErrorPayload } from "~/shared";
 import instance from "~/services/axios-instance";
+import { Dayjs } from "dayjs";
 
 export interface DashboardPayload {
-  startDate: string;
-  endDate: string;
+  startDate: Dayjs;
+  endDate: Dayjs;
   branch: string;
   dashboardType: DashboardType;
 }
@@ -43,8 +44,8 @@ export const getDataDashboard = createAsyncThunk(
   "dashboard/getDataDashboard",
   async (payload: DashboardPayload, thunkApi) => {
     const urlParams = new URLSearchParams({
-      startDate: payload.startDate,
-      endDate: payload.endDate,
+      startDate: payload.startDate.toISOString(),
+      endDate: payload.endDate.toISOString(),
       branch: payload.branch,
       dashboardType: payload.dashboardType,
     }).toString();

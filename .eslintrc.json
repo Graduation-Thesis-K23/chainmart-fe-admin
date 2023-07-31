@@ -38,5 +38,6 @@
     ],
     "@typescript-eslint/no-unused-vars": "warn",
     "no-empty-interface": "off"
-  }
+  },
+  "ignorePatterns": ["src/shared/**/*"]
 }
