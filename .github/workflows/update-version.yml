@@ -134,7 +134,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            ./cd-scripts/chainmart-fe-admin/deploy.sh
+            cd cd-scripts/chainmart-fe-admin
+            ./deploy.sh
         continue-on-error: true
 
       - name: Send mesage to Telegram
