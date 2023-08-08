@@ -212,10 +212,14 @@ const EmployeesManagement = () => {
         })}
       />
       {employee.status === ASYNC_STATUS.FAILED && <ReloadButton />}
-      <MoreEmployeeDrawer
-        employeeDrawer={moreDrawer}
-        handleEmployeeDrawer={handleMoreEmployee}
-      />
+
+      {moreDrawer && (
+        <MoreEmployeeDrawer
+          employeeDrawer={moreDrawer}
+          handleEmployeeDrawer={handleMoreEmployee}
+        />
+      )}
+
       {detailModal && (
         <ViewEmployeeDrawer
           employee={selectedEmployee}
