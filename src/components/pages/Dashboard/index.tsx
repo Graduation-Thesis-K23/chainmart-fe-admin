@@ -36,9 +36,7 @@ const DashboardSc: FC = () => {
   const [startDate, setStartDate] = React.useState<Dayjs>(
     dayjs().subtract(30, "days")
   );
-  const [endDate, setEndDate] = React.useState<Dayjs>(
-    dayjs().subtract(1, "days")
-  );
+  const [endDate, setEndDate] = React.useState<Dayjs>(dayjs());
   const [branch, setBranch] = React.useState<string>("all");
   const [dashboardType, setDashboardType] = React.useState<DashboardType>(
     DashboardType.OrdersDaily
@@ -93,8 +91,13 @@ const DashboardSc: FC = () => {
           {/* only in the pass and max 60 days */}
           <DatePicker.RangePicker
             disabledDate={(current) => {
+              // add 1 day to current date
+              const newCurrent = dayjs(current).subtract(1, "day");
               const customDate = dayjs().format("YYYY-MM-DD");
-              return current && current > moment(customDate, "YYYY-MM-DD");
+
+              return (
+                newCurrent && newCurrent > moment(customDate, "YYYY-MM-DD")
+              );
             }}
             format={"DD/MM/YYYY"}
             onChange={(value) => {
@@ -103,14 +106,8 @@ const DashboardSc: FC = () => {
               setStartDate(startDate);
               setEndDate(endDate);
             }}
-            defaultPickerValue={[
-              dayjs().subtract(30, "days"),
-              dayjs().subtract(1, "days"),
-            ]}
-            defaultValue={[
-              dayjs().subtract(30, "days"),
-              dayjs().subtract(1, "days"),
-            ]}
+            defaultPickerValue={[dayjs().subtract(30, "days"), dayjs()]}
+            defaultValue={[startDate, endDate]}
           />
           <Select
             defaultValue={branch}

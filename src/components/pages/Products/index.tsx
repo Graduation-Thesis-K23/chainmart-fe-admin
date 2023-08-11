@@ -32,6 +32,7 @@ import withAuth from "~/hocs/withAuth";
 import TranslateFunc from "~/utils/dictionary";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import ReloadButton from "~/components/common/ReloadButton";
+import convertPrice from "~/utils/convert-price";
 
 export interface ProductUpdate extends Omit<ProductType, "specifications"> {
   specifications: string;
@@ -201,6 +202,7 @@ const ProductsManagement = () => {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (price) => <span>{convertPrice(price)}</span>,
       sorter: (a, b) => a.price - b.price,
     },
     {
