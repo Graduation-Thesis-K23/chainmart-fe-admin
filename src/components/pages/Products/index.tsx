@@ -272,6 +272,7 @@ const ProductsManagement = () => {
           pageSize: 10,
           onChange: (page) => handleChangePagination(page),
           total: productsState.metadata.totalDocs,
+          showSizeChanger: false,
         }}
         onRow={(record) => ({
           onClick: () => handleClickProduct(record),

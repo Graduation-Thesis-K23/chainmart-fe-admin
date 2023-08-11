@@ -206,6 +206,7 @@ const EmployeesManagement = () => {
           position: ["topCenter"],
           pageSize: 12,
           onChange: (page, pageSize) => handleChangePagination(page, pageSize),
+          showSizeChanger: false,
         }}
         onRow={(record) => ({
           onClick: () => handleClickEmployee(record),

@@ -5,6 +5,9 @@ export const SpecificationsContainer = styled.div`
 `;
 
 export const SpecificationsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: black;
 `;
 

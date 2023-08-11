@@ -6,7 +6,6 @@ import {
   SpecificationsHeader,
   SpecificationsLabel,
   SpecificationsList,
-  SpecificationsSub,
 } from "./styled";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Log from "~/utils/Log";
@@ -77,6 +76,7 @@ const Specifications: FC<{
         <PlusCircleTwoTone
           style={{
             cursor: "pointer",
+            fontSize: 22,
           }}
           onClick={() => handleMoreSpecifications(true)}
         />
@@ -85,28 +85,97 @@ const Specifications: FC<{
       <SpecificationsList>
         <div>
           {specifications.map((spec, index) => (
-            <p key={spec.id}>
+            <div
+              key={spec.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 3,
+                paddingBottom: 3,
+                borderBottom: "1px solid #beb5b5",
+              }}
+            >
               <span>
                 {index + 1}. {spec.key}: {spec.value}
               </span>
-              <SpecificationsSub
+              <button
                 onClick={() => handleRemoteSpecifications(spec.id)}
+                style={{
+                  display: "inline-block",
+                  width: 80,
+                  height: 30,
+                  cursor: "pointer",
+                  backgroundColor: "#9aa3ac",
+                  color: "#fff",
+                  border: "none",
+                }}
               >
                 Remove
-              </SpecificationsSub>
-            </p>
+              </button>
+            </div>
           ))}
         </div>
 
         {moreSpecifications && (
           <div>
-            <div>
-              <input {...register("key")} />
-              <input {...register("value")} />
+            <div
+              style={{
+                padding: 6,
+              }}
+            >
+              <input
+                style={{
+                  width: "28%",
+                  marginRight: "2%",
+                  padding: 6,
+                  outline: "none",
+                }}
+                {...register("key")}
+                placeholder="Key"
+              />
+              <input
+                style={{
+                  width: "70%",
+                  padding: 6,
+                  outline: "none",
+                }}
+                {...register("value")}
+                placeholder="Value"
+              />
             </div>
-            <div>
-              <button onClick={handleSubmit(onSubmit)}>Add</button>
-              <button onClick={() => handleMoreSpecifications(false)}>
+            <div
+              style={{
+                padding: 6,
+              }}
+            >
+              <button
+                style={{
+                  display: "inline-block",
+                  marginRight: 10,
+                  width: 80,
+                  height: 30,
+                  cursor: "pointer",
+                  backgroundColor: "#1890ff",
+                  color: "#fff",
+                  border: "none",
+                }}
+                onClick={handleSubmit(onSubmit)}
+              >
+                Add
+              </button>
+              <button
+                style={{
+                  display: "inline-block",
+                  width: 80,
+                  height: 30,
+                  cursor: "pointer",
+                  backgroundColor: "#9aa3ac",
+                  color: "#fff",
+                  border: "none",
+                }}
+                onClick={() => handleMoreSpecifications(false)}
+              >
                 Cancel
               </button>
             </div>
