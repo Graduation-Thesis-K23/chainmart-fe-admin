@@ -65,6 +65,11 @@ export const loginState = createSlice({
     builder.addCase(checkCookieToken.rejected, (state) => {
       state.status = ASYNC_STATUS.FAILED;
     });
+    builder.addCase(logout.fulfilled, (state) => {
+      state.status = ASYNC_STATUS.IDLE;
+      state.data = {} as User;
+      state.message = "";
+    });
   },
 });
 
