@@ -3,14 +3,15 @@ import React, { FC, memo, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Input, Select } from "~/components/common";
+import Switch from "~/components/common/Switch";
 import {
   ASYNC_STATUS,
-  AddEmployeeType,
   EmployeeType,
   fetchBranch,
   updateEmployee,
   useAppDispatch,
   useAppSelector,
+  resetPassword,
 } from "~/redux";
 
 const ViewEmployeeDrawer: FC<{
@@ -30,14 +31,38 @@ const ViewEmployeeDrawer: FC<{
       name: employee.name,
       phone: employee.phone,
       branch_id: employee.branch.name,
+      isActive: employee.isActive,
     },
   });
 
-  const onSubmit: SubmitHandler<AddEmployeeType> = async (data) => {
+  const handleResetPassword = async (id: string) => {
+    console.log(id);
+    const result = await dispatch(resetPassword(id));
+
+    if (resetPassword.fulfilled.match(result)) {
+      toast("Password reset successfully", {
+        type: "success",
+        position: "bottom-right",
+      });
+    } else {
+      toast("Something was wrong", {
+        type: "error",
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const onSubmit: SubmitHandler<{
+    name: string;
+    phone: string;
+    branch_id: string;
+    isActive: boolean;
+  }> = async (data) => {
+    console.log(data);
     const result = await dispatch(
       updateEmployee({
-        id: employee.id as string,
         ...data,
+        id: employee.id as string,
       })
     );
 
@@ -101,8 +126,8 @@ const ViewEmployeeDrawer: FC<{
           </Col>
         </Row>
 
-        <Row>
-          <Col span={24}>
+        <Row gutter={[24, 24]}>
+          <Col span={16}>
             <Controller
               name="branch_id"
               control={control}
@@ -123,9 +148,29 @@ const ViewEmployeeDrawer: FC<{
               rules={{ required: true }}
             />
           </Col>
+          <Col span={8}>
+            <Controller
+              name="isActive"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Switch
+                  label="Active"
+                  onChange={onChange}
+                  value={employee.isActive}
+                />
+              )}
+              rules={{ required: true }}
+            />
+          </Col>
         </Row>
       </form>
+      <Col span={24}>
+        <Button type="primary" onClick={() => handleResetPassword(employee.id)}>
+          Reset Password
+        </Button>
+      </Col>
       <Button
+        style={{ marginTop: 10 }}
         type="primary"
         disabled={isSubmitting || !isDirty}
         onClick={handleSubmit(onSubmit)}

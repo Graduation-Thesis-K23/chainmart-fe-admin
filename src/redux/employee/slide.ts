@@ -10,9 +10,13 @@ export interface EmployeeType {
   name: string;
   phone: string;
   branch: BranchType;
+  isActive: boolean;
 }
 
-export type AddEmployeeType = Omit<EmployeeType, "id" | "branch"> & {
+export type AddEmployeeType = Omit<
+  EmployeeType,
+  "isActive" | "id" | "branch"
+> & {
   branch_id: string;
 };
 
@@ -111,6 +115,21 @@ export const updateEmployee = createAsyncThunk(
     }
 
     return thunkApi.fulfillWithValue(response);
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "employee/resetPassword",
+  async (id: string, thunkApi) => {
+    const response: EmployeeType | ErrorPayload = await instance.get(
+      "/api/employee/reset-password/" + id
+    );
+
+    if ("message" in response) {
+      return thunkApi.rejectWithValue(response.message as unknown as string);
+    }
+
+    return thunkApi.fulfillWithValue(response as unknown as EmployeeType);
   }
 );
 

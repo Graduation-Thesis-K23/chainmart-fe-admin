@@ -15,7 +15,15 @@ const Select: FC<{
   value?: string | string[] | number | number[] | LabeledValue | LabeledValue[];
   defaultValue?: string;
   loading?: boolean;
-}> = ({ label, onChange, options, defaultValue, loading = false }) => {
+  disabled?: boolean;
+}> = ({
+  label,
+  onChange,
+  options,
+  defaultValue,
+  loading = false,
+  disabled = false,
+}) => {
   const id = useId();
 
   return (
@@ -33,6 +41,7 @@ const Select: FC<{
             width: "100%",
           }}
           defaultValue={defaultValue}
+          disabled={disabled}
         />
       </SelectG>
     </SelectGroup>
