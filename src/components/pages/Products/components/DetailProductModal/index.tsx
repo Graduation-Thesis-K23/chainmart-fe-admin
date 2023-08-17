@@ -23,6 +23,7 @@ import {
 } from "~/redux";
 import categories from "~/sub-categories/categories";
 import TranslateFunc from "~/utils/dictionary";
+import Switch from "~/components/common/Switch";
 
 const DetailModal: FC<{
   detailModal: boolean;
@@ -197,16 +198,11 @@ const DetailModal: FC<{
           </Col>
           <Col span={6}>
             <Controller
-              name="product_code"
+              name="show"
               control={control}
               render={({ field: { onChange } }) => (
-                <Input
-                  label="Product Code"
-                  onChange={onChange}
-                  value={product.product_code}
-                />
+                <Switch label="Show" onChange={onChange} value={product.show} />
               )}
-              rules={{ required: true }}
             />
           </Col>
         </Row>
@@ -230,7 +226,7 @@ const DetailModal: FC<{
         <SubmitGroup>
           <Button
             type="primary"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
             loading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >

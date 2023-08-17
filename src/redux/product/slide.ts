@@ -19,6 +19,7 @@ export interface ProductType {
   specifications: string;
   product_code: string;
   acceptable_expiry_threshold: number;
+  show: boolean;
 }
 
 export interface ProductsState {
