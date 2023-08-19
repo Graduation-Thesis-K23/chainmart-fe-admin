@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ASYNC_STATUS } from "../constants";
 import instance from "~/services/axios-instance";
-import { ErrorPayload, OrdersRender } from "~/shared";
+import { ErrorPayload, OrderStatus, OrdersRender } from "~/shared";
 
 export interface OrdersState {
   data: OrdersRender[];
@@ -34,9 +34,21 @@ export const ordersState = createSlice({
 
 export const fetchOrders = createAsyncThunk(
   "orders/fetchOrders",
-  async (_, thunkApi) => {
+  async (
+    payload: {
+      status: OrderStatus | "all";
+      search: string;
+    },
+    thunkApi
+  ) => {
     const response: OrdersRender[] | ErrorPayload = await instance.get(
-      "/api/orders"
+      "/api/orders/admin",
+      {
+        params: {
+          status: payload.status,
+          search: payload.search,
+        },
+      }
     );
 
     if ("message" in response) {

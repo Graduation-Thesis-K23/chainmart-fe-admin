@@ -9,6 +9,7 @@ import {
   Suppliers,
   NotFound,
   Branch,
+  Orders,
 } from "~/components/pages";
 import MainLayout from "~/components/layouts/MainLayout";
 import ErrorBoundary from "~/components/pages/ErrorBoundary";
@@ -37,10 +38,10 @@ const routerList = [
     path: "/employees",
     element: <Employees />,
   },
-  /* {
+  {
     path: "/orders",
     element: <Orders />,
-  }, */
+  },
   {
     path: "/branch",
     element: <Branch />,

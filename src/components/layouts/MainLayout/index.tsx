@@ -7,6 +7,7 @@ import {
   UsergroupAddOutlined,
   ApartmentOutlined,
   AuditOutlined,
+  CodepenOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { Header, HomeLink, Image } from "./styled";
@@ -44,11 +45,11 @@ const items: MenuProps["items"] = [
     icon: <UsergroupAddOutlined />,
     label: <Link to="/employees">Employees Management</Link>,
   },
-  /*  {
+  {
     key: PAGES.ORDERS,
     icon: <CodepenOutlined />,
     label: <Link to="/orders">Orders Management</Link>,
-  }, */
+  },
   {
     key: PAGES.BRANCH,
     icon: <ApartmentOutlined />,

@@ -1,71 +1,143 @@
 import { Col, Drawer, Row } from "antd";
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, memo, useMemo } from "react";
 import { OrderDetailsProps } from ".";
 import Span from "./Span";
 import convertPrice from "~/utils/convert-price";
 import { ProductsLabel, ProductsTable, TBody, THead } from "./styled";
+import convertTimestamp from "~/utils/convert-timestamp";
 
 const ViewOrder: FC<{
   order: OrderDetailsProps;
   viewOrder: boolean;
   handleViewOrder: (status: boolean) => void;
 }> = ({ order, viewOrder, handleViewOrder }) => {
+  const total = useMemo(() => {
+    return order.order_details?.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+  }, [order.order_details]);
+
   return (
     <Drawer
       title="View Order Details"
       placement="right"
       open={viewOrder}
       onClose={() => handleViewOrder(false)}
-      width={1200}
+      width={1400}
     >
       <Row gutter={24}>
-        <Col span={5}>
+        <Col span={8}>
           <Span label="Order ID" value={order.id} />
         </Col>
-
-        <Col span={5}>
-          <Span
-            label="Estimated Shipped Date"
-            value={order.estimated_shipped_date.toString()}
-          />
+        <Col span={4}>
+          <Span label="Created At" value={convertTimestamp(order.created_at)} />
         </Col>
-
-        <Col span={5}>
-          <Span label="Total" value={convertPrice(order.total)} />
-        </Col>
-        <Col span={5}>
+        <Col span={4}>
           <Span label="Status" value={order.status} />
+        </Col>
+        <Col span={4}>
+          <Span label="Total" value={convertPrice(total)} />
         </Col>
         <Col span={4}>
           <Span label="Payment" value={order.payment} />
         </Col>
       </Row>
       <Row gutter={24}>
-        <Col span={5}>
-          <Span label="Create At" value={order.created_at.toString()} />
-        </Col>
-        <Col span={5}>
+        <Col span={4}>
           <Span
             label="Approved Date"
-            value={order.approved_date ? order.approved_date.toString() : "N/A"}
-          />
-        </Col>
-        <Col span={5}>
-          <Span
-            label="Shipped Date"
-            value={order.shipped_date ? order.shipped_date.toString() : "N/A"}
-          />
-        </Col>
-        <Col span={5}>
-          <Span
-            label="Canceled Date"
-            value={order.canceled_date ? order.canceled_date.toString() : "N/A"}
+            value={
+              order.approved_date
+                ? convertTimestamp(order.approved_date)
+                : "N/A"
+            }
           />
         </Col>
         <Col span={4}>
           <Span
-            label="Return Date"
-            value={order.return_date ? order.return_date.toString() : "N/A"}
+            label="Packaged Date"
+            value={
+              order.packaged_date
+                ? convertTimestamp(order.packaged_date)
+                : "N/A"
+            }
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Started Shipment Date"
+            value={
+              order.started_date ? convertTimestamp(order.started_date) : "N/A"
+            }
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Completed Shipment Date"
+            value={
+              order.completed_date
+                ? convertTimestamp(order.completed_date)
+                : "N/A"
+            }
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Cancelled Date"
+            value={
+              order.cancelled_date
+                ? convertTimestamp(order.cancelled_date)
+                : "N/A"
+            }
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Returned Date"
+            value={
+              order.returned_date
+                ? convertTimestamp(order.returned_date)
+                : "N/A"
+            }
+          />
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col span={4}>
+          <Span
+            label="Approved By"
+            value={order.approved_by ? order.approved_by : "N/A"}
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Packaged By"
+            value={order.packaged_by ? order.packaged_by : "N/A"}
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Started Shipment By"
+            value={order.started_by ? order.started_by : "N/A"}
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Completed Shipment By"
+            value={order.completed_by ? order.completed_by : "N/A"}
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Cancelled By"
+            value={order.cancelled_by ? order.cancelled_by : "N/A"}
+          />
+        </Col>
+        <Col span={4}>
+          <Span
+            label="Returned By"
+            value={order.returned_by ? order.returned_by : "N/A"}
           />
         </Col>
       </Row>
@@ -114,4 +186,4 @@ const ViewOrder: FC<{
   );
 };
 
-export default ViewOrder;
+export default memo(ViewOrder);
