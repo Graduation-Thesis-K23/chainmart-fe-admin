@@ -13,6 +13,7 @@ import {
   useAppSelector,
   resetPassword,
 } from "~/redux";
+import checkUUID from "~/utils/check-uuid";
 
 const ViewEmployeeDrawer: FC<{
   employee: EmployeeType;
@@ -31,9 +32,11 @@ const ViewEmployeeDrawer: FC<{
       name: employee.name,
       phone: employee.phone,
       branch_id: employee.branch.name,
-      isActive: employee.isActive,
+      isActive: employee.isActive ? "1" : "0",
     },
   });
+
+  console.log(employee);
 
   const handleResetPassword = async (id: string) => {
     console.log(id);
@@ -42,12 +45,12 @@ const ViewEmployeeDrawer: FC<{
     if (resetPassword.fulfilled.match(result)) {
       toast("Password reset successfully", {
         type: "success",
-        position: "bottom-right",
+        position: "top-right",
       });
     } else {
       toast("Something was wrong", {
         type: "error",
-        position: "bottom-right",
+        position: "top-right",
       });
     }
   };
@@ -56,13 +59,25 @@ const ViewEmployeeDrawer: FC<{
     name: string;
     phone: string;
     branch_id: string;
-    isActive: boolean;
+    isActive: string;
   }> = async (data) => {
-    console.log(data);
+    const branch_id = checkUUID(data.branch_id)
+      ? data.branch_id
+      : employee.branch.id;
+
+    console.log({
+      ...data,
+      id: employee.id as string,
+      isActive: data.isActive === "1" ? true : false,
+      branch_id,
+    });
+
     const result = await dispatch(
       updateEmployee({
         ...data,
         id: employee.id as string,
+        isActive: data.isActive === "1" ? true : false,
+        branch_id,
       })
     );
 
@@ -153,10 +168,20 @@ const ViewEmployeeDrawer: FC<{
               name="isActive"
               control={control}
               render={({ field: { onChange } }) => (
-                <Switch
+                <Select
                   label="Active"
                   onChange={onChange}
-                  value={employee.isActive}
+                  defaultValue={employee.isActive ? "1" : "0"}
+                  options={[
+                    {
+                      label: "Active",
+                      value: "1",
+                    },
+                    {
+                      label: "Disable",
+                      value: "0",
+                    },
+                  ]}
                 />
               )}
               rules={{ required: true }}
