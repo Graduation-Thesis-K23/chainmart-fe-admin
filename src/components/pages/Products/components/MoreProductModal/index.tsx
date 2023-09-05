@@ -1,7 +1,7 @@
 import React, { useEffect, FC } from "react";
 import { Row, Col, Button, Drawer } from "antd";
-import { useForm, Controller } from "react-hook-form";
-import { SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 import { Input, Select } from "~/components/common";
 
@@ -54,12 +54,27 @@ const MoreProductModal: FC<{
     acceptable_expiry_threshold: 30,
   };
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm({
     defaultValues,
   });
 
   const onSubmit: SubmitHandler<MoreProduct> = async (data) => {
     const bodyFormData = new FormData();
+
+    if (data.images.length < 2) {
+      // set errors images
+      setError("images", {
+        type: "manual",
+        message: "Please select at least 2 images",
+      });
+      return;
+    }
+
     for (const image of data.images) {
       bodyFormData.append("images", image);
     }
@@ -96,6 +111,8 @@ const MoreProductModal: FC<{
     }
   };
 
+  console.log(errors);
+
   useEffect(() => {
     dispatch(fetchSuppliers());
   }, []);
@@ -123,8 +140,11 @@ const MoreProductModal: FC<{
                   name={name}
                 />
               )}
-              rules={{ required: true }}
+              rules={{
+                required: "Please enter product name",
+              }}
             />
+            <ErrorMessage errors={errors} name="name" />
           </Col>
           <Col span={6}>
             <Controller
@@ -140,8 +160,11 @@ const MoreProductModal: FC<{
                   type="number"
                 />
               )}
-              rules={{ required: true }}
+              rules={{
+                required: "Please enter acceptable expiry threshold",
+              }}
             />
+            <ErrorMessage errors={errors} name="acceptable_expiry_threshold" />
           </Col>
           <Col span={6}>
             <Controller
@@ -159,8 +182,9 @@ const MoreProductModal: FC<{
                   ]}
                 />
               )}
-              rules={{ required: true }}
+              rules={{ required: "Please select category" }}
             />
+            <ErrorMessage errors={errors} name="category" />
           </Col>
         </Row>
         <Row gutter={[24, 24]}>
@@ -178,8 +202,15 @@ const MoreProductModal: FC<{
                   type="number"
                 />
               )}
-              rules={{ required: true }}
+              rules={{
+                min: {
+                  value: 1,
+                  message: "Price must be greater than 1",
+                },
+                required: true,
+              }}
             />
+            <ErrorMessage errors={errors} name="price" />
           </Col>
           <Col span={6}>
             <Controller
@@ -195,8 +226,15 @@ const MoreProductModal: FC<{
                   type="number"
                 />
               )}
-              rules={{ required: true }}
+              rules={{
+                required: true,
+                max: {
+                  value: 100,
+                  message: "Sale must be less than 100",
+                },
+              }}
             />
+            <ErrorMessage errors={errors} name="sale" />
           </Col>
           <Col span={6}>
             <Controller
@@ -215,8 +253,11 @@ const MoreProductModal: FC<{
                   ]}
                 />
               )}
-              rules={{ required: true }}
+              rules={{
+                required: "Please select supplier",
+              }}
             />
+            <ErrorMessage errors={errors} name="supplier_id" />
           </Col>
           <Col span={6}>
             <Controller
@@ -231,8 +272,9 @@ const MoreProductModal: FC<{
                   name={name}
                 />
               )}
-              rules={{ required: true }}
-            />
+              rules={{ required: "Please enter product code" }}
+            />{" "}
+            <ErrorMessage errors={errors} name="product_code" />
           </Col>
         </Row>
         <Row gutter={[24, 24]}>
@@ -243,8 +285,9 @@ const MoreProductModal: FC<{
               render={({ field: { onChange } }) => (
                 <Images onChange={onChange} />
               )}
-              rules={{ required: true }}
+              rules={{ required: "Please enter min 2 images" }}
             />
+            <ErrorMessage errors={errors} name="images" />
           </Col>
         </Row>
         <Row gutter={[24, 24]}>
@@ -255,7 +298,6 @@ const MoreProductModal: FC<{
               render={({ field: { onChange } }) => (
                 <Specifications onChange={onChange} />
               )}
-              rules={{ required: true }}
             />
           </Col>
           <Col span={12}>
@@ -265,11 +307,9 @@ const MoreProductModal: FC<{
               render={({ field: { onChange } }) => (
                 <Description onChange={onChange} />
               )}
-              rules={{ required: true }}
             />
           </Col>
         </Row>
-        <Row gutter={[24, 24]}></Row>
         <SubmitGroup>
           <Button
             onClick={handleSubmit(onSubmit)}

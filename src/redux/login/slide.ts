@@ -15,6 +15,7 @@ export interface User {
   phone: string;
   name: string;
   role: string;
+  branch: string;
 }
 
 export interface LoginState {

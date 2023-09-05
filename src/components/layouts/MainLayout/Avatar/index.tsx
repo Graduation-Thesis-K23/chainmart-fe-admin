@@ -32,6 +32,7 @@ const Avatar = () => {
           {status === ASYNC_STATUS.SUCCEED ? (
             <>
               <Name>{data.name}</Name>
+              <Email>{data.branch}</Email>
               <Email>{data.phone}</Email>
             </>
           ) : (

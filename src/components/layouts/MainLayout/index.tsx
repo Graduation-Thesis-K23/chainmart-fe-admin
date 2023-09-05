@@ -65,7 +65,7 @@ const items: MenuProps["items"] = [
 const MainLayout: FC<{
   children: ReactElement;
 }> = ({ children }) => {
-  const { status } = useAppSelector((state) => state.login);
+  const { status, data } = useAppSelector((state) => state.login);
 
   if (status === ASYNC_STATUS.IDLE || status === ASYNC_STATUS.LOADING) {
     return (
@@ -92,7 +92,14 @@ const MainLayout: FC<{
       </Layout.Sider>
       <Layout>
         <Header>
-          <div />
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+          >
+            {data.branch}
+          </div>
           <Avatar />
         </Header>
         <Layout.Content>{children}</Layout.Content>

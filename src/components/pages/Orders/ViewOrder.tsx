@@ -27,8 +27,11 @@ const ViewOrder: FC<{
       width={1400}
     >
       <Row gutter={24}>
-        <Col span={8}>
-          <Span label="Order ID" value={order.id} />
+        <Col span={4}>
+          <Span label="Order Code" value={order.order_code} />
+        </Col>
+        <Col span={4}>
+          <Span label="Branch Name" value={order.branch.name} />
         </Col>
         <Col span={4}>
           <Span label="Created At" value={convertTimestamp(order.created_at)} />
@@ -155,6 +158,7 @@ const ViewOrder: FC<{
           />
         </Col>
       </Row>
+
       <Row gutter={24}>
         <Col span={24}>
           <ProductsLabel>Product List</ProductsLabel>

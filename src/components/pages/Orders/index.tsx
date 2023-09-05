@@ -68,6 +68,10 @@ export interface OrderDetailsProps {
   returned_by?: string;
   completed_by?: string;
   user_id: string;
+  order_code: string;
+  branch: {
+    name: string;
+  };
 }
 
 const OrdersManagement = () => {

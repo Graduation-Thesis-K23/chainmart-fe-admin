@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "^18.15.1",
     "@types/react": "^18.0.25",
