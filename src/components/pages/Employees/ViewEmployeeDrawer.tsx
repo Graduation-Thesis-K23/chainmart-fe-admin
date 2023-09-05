@@ -3,7 +3,6 @@ import React, { FC, memo, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Input, Select } from "~/components/common";
-import Switch from "~/components/common/Switch";
 import {
   ASYNC_STATUS,
   EmployeeType,
