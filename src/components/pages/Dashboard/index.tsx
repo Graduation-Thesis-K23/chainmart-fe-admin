@@ -161,8 +161,8 @@ const DashboardSc: FC = () => {
         <DashboardBody>
           {chartType === "line" ? (
             <LineChart
-              width={1400}
-              height={700}
+              width={1800}
+              height={800}
               data={data}
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             >
@@ -174,7 +174,7 @@ const DashboardSc: FC = () => {
               <Line type="monotone" dataKey="value" stroke="#8884d8" />
             </LineChart>
           ) : (
-            <BarChart width={1400} height={700} data={data}>
+            <BarChart width={1700} height={800} data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="label" />
               <YAxis />

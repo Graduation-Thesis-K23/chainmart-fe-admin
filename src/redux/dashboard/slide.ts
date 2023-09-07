@@ -32,7 +32,10 @@ export const dashboardType = createSlice({
     });
     builder.addCase(getDataDashboard.fulfilled, (state, action) => {
       state.status = ASYNC_STATUS.SUCCEED;
-      state.data = action.payload;
+      state.data = action.payload.map((item) => ({
+        ...item,
+        value: Number(item.value),
+      }));
     });
     builder.addCase(getDataDashboard.rejected, (state) => {
       state.status = ASYNC_STATUS.FAILED;
