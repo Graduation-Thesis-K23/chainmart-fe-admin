@@ -31,7 +31,10 @@ const ViewOrder: FC<{
           <Span label="Order Code" value={order.order_code} />
         </Col>
         <Col span={4}>
-          <Span label="Branch Name" value={order.branch.name} />
+          <Span
+            label="Branch Name"
+            value={order.branch ? order.branch.name : "N/A"}
+          />
         </Col>
         <Col span={4}>
           <Span label="Created At" value={convertTimestamp(order.created_at)} />
