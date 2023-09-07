@@ -194,7 +194,7 @@ const SuppliersManagement = () => {
         loading={!(suppliers.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
-          y: "calc(100vh - 241px)",
+          y: "calc(100vh - 267px)",
         }}
         pagination={false}
         rowKey="id"
