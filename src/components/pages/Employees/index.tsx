@@ -199,7 +199,7 @@ const EmployeesManagement = () => {
         loading={!(employee.status == ASYNC_STATUS.SUCCEED)}
         scroll={{
           scrollToFirstRowOnChange: true,
-          y: "calc(100vh - 203px)",
+          y: "calc(100vh - 267px)",
         }}
         pagination={{
           defaultCurrent: 1,
